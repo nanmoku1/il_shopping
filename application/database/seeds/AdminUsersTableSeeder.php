@@ -11,6 +11,7 @@ class AdminUsersTableSeeder extends Seeder
             'name' => '管理者',
             'email' => 'admin@a.com',
             'password' => Hash::make('pass'),
+            'is_owner' => 1,
             'created_at' => new Datetime(),
         ]);
         $fake = Fake::create('ja_JP');
@@ -19,6 +20,7 @@ class AdminUsersTableSeeder extends Seeder
                 'name' => $fake->name,
                 'email' => $fake->email,
                 'password' => Hash::make('pass'),
+                'is_owner' => 0,
                 'created_at' => new Datetime(),
             ]);
         }
