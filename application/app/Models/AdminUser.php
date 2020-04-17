@@ -47,6 +47,9 @@ class AdminUser extends Authenticatable
         'password',
     ];
 
+    /**
+     * @var array
+     */
     protected $casts = [
         'is_owner' => 'boolean'
     ];
