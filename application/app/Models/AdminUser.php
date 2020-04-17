@@ -46,4 +46,8 @@ class AdminUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    protected $casts = [
+        'is_owner' => 'boolean'
+    ];
 }
