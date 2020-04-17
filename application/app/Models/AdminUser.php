@@ -32,7 +32,10 @@ class AdminUser extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'is_owner',
+        'name',
+        'email',
+        'password',
+        'is_owner',
     ];
 
     /**
@@ -42,5 +45,12 @@ class AdminUser extends Authenticatable
      */
     protected $hidden = [
         'password',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'is_owner' => 'boolean'
     ];
 }
