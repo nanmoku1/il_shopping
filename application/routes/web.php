@@ -29,6 +29,7 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('logout', 'LoginController@logout')->name('logout');
         Route::get('home', 'HomeController@index')->name('home');
+        Route::get('admin_users', 'AdminUsersController@index')->name('admin_users_list');
     });
 });
 
