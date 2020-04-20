@@ -76,7 +76,7 @@
             @foreach($adminUsers as $au)
                 <tr>
                     <td>{{ $au->id }}</td>
-                    <td>{{ $au->name }}</td>
+                    <td><a href="{{ route("admin.admin_users_detail", ["id"=>$au->id]) }}">{{ $au->name }}</a></td>
                     <td>{{ $au->email }}</td>
                     <td>{{ $au->is_owner ? "オーナー":"一般" }}</td>
                 </tr>

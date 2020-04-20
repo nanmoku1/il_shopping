@@ -30,6 +30,8 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
         Route::post('logout', 'LoginController@logout')->name('logout');
         Route::get('home', 'HomeController@index')->name('home');
         Route::get('admin_users', 'AdminUsersController@index')->name('admin_users_list');
+        Route::get('admin_users/{id}', 'AdminUsersController@detail')->name('admin_users_detail');
+        Route::delete('admin_users/{id}', 'AdminUsersController@delete')->name('admin_users_delete');
     });
 });
 
