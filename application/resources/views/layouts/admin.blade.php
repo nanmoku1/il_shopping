@@ -67,7 +67,7 @@
                     </li>
                     @if(auth('admin')->user()->is_owner)
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route("admin.admin_users_list") }}">
                             管理者管理
                         </a>
                     </li>

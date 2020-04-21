@@ -58,7 +58,7 @@
 
     <ul class="list-inline pt-3">
         <li class="list-inline-item">
-            <a href="#" class="btn btn-success">新規</a>
+            <a href="{{ route("admin.admin_users_create_page") }}" class="btn btn-success">新規</a>
         </li>
     </ul>
 

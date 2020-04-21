@@ -77,6 +77,69 @@ class AdminUsersController extends Controller
     }
 
     /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
+    public function create_page()
+    {
+        $loginUser = Auth::guard('admin')->user();
+        if(!$loginUser->is_owner) return \App::abort(403);
+        return view('admin.users_create');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function create(Request $request)
+    {
+        $loginUser = Auth::guard('admin')->user();
+        if(!$loginUser->is_owner) return \App::abort(403);
+
+        $vali = \Validator::make($request->all()
+            ,[
+                "name"=>"required|string|max:255"
+                ,"email"=>[
+                    "required"
+                    ,"string"
+                    ,"email"
+                    ,"max:255"
+                    ,function($attribute, $value, $fail)
+                    {
+                        $au = AdminUser::select(["id"])->where("email", "=", $value)->first();
+                        if($au) return $fail("既に登録されているメールアドレスです。");
+                    }
+                ]
+                ,"password"=>"required|min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation"
+            ]
+            ,[
+                "name.required"=>"ログイン名は必須です。"
+                ,"name.max"=>"名前は255文字以内です。"
+                ,"email.required"=>"メールアドレスは必須です。"
+                ,"email.email"=>"メールアドレスの形式が不正です。"
+                ,"email.max"=>"メールアドレスは255文字以内です。"
+                ,"password.required"=>"パスワードは必須です。"
+                ,"password.min"=>"パスワードが4文字以下です。"
+                ,"password.regex"=>"パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。"
+                ,"password.same"=>"パスワードが確認と一致していません。"
+            ]
+        );
+
+        if($vali->fails())
+        {
+            return redirect()->route("admin.admin_users_create_page")->withErrors($vali->errors())->withInput();
+        }
+
+        $cAU = AdminUser::create([
+            "name"=>$request->input("name")
+            ,"email"=>$request->input("email")
+            ,"password"=>\Hash::make($request->input("password"))
+            ,"is_owner"=>$request->input("is_owner")
+        ]);
+
+        return redirect()->route("admin.admin_users_detail", ["id"=>$cAU->id]);
+    }
+
+    /**
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
