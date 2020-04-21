@@ -15,6 +15,7 @@ class AdminUsersController extends Controller
      */
     public function index(Request $request)
     {
+        //オーナー権限ユーザーのみ利用可
         $loginUser = Auth::guard('admin')->user();
         if(!$loginUser->is_owner) return \App::abort(403);
 
@@ -66,7 +67,7 @@ class AdminUsersController extends Controller
         $loginUser = Auth::guard('admin')->user();
         $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
 
-        //オーナーかログインユーザー本人でなければ閲覧不可
+        //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         if( !$loginUser->is_owner
             && (!$adminUser || $loginUser->id !== $adminUser->id) )
         {
@@ -81,6 +82,7 @@ class AdminUsersController extends Controller
      */
     public function create_page()
     {
+        //オーナー権限ユーザーのみ利用可
         $loginUser = Auth::guard('admin')->user();
         if(!$loginUser->is_owner) return \App::abort(403);
         return view('admin.users_create');
@@ -92,6 +94,7 @@ class AdminUsersController extends Controller
      */
     public function create(Request $request)
     {
+        //オーナー権限ユーザーのみ利用可
         $loginUser = Auth::guard('admin')->user();
         if(!$loginUser->is_owner) return \App::abort(403);
 
@@ -149,7 +152,7 @@ class AdminUsersController extends Controller
         $loginUser = Auth::guard('admin')->user();
         $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
 
-        //オーナーかログインユーザー本人でなければ閲覧不可
+        //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         if( !$loginUser->is_owner
             && (!$adminUser || $loginUser->id !== $adminUser->id) )
         {
@@ -169,7 +172,7 @@ class AdminUsersController extends Controller
         $loginUser = Auth::guard('admin')->user();
         $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
 
-        //オーナーかログインユーザー本人でなければ閲覧不可
+        //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         if( !$loginUser->is_owner
             && (!$adminUser || $loginUser->id !== $adminUser->id) )
         {
@@ -231,6 +234,7 @@ class AdminUsersController extends Controller
      */
     public function delete(Request $request, $id)
     {
+        //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
         $loginUser = Auth::guard('admin')->user();
         $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
 
