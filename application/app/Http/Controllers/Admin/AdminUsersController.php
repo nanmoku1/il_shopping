@@ -11,7 +11,7 @@ class AdminUsersController extends Controller
 {
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public function index(Request $request)
     {
@@ -59,7 +59,7 @@ class AdminUsersController extends Controller
     /**
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public function detail(Request $request, $id)
     {
@@ -142,7 +142,92 @@ class AdminUsersController extends Controller
     /**
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
+    public function edit_page(Request $request, $id)
+    {
+        $loginUser = Auth::guard('admin')->user();
+        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
+
+        //オーナーかログインユーザー本人でなければ閲覧不可
+        if( !$loginUser->is_owner
+            && (!$adminUser || $loginUser->id !== $adminUser->id) )
+        {
+            return \App::abort(403);
+        }
+
+        return view('admin.users_edit', compact("adminUser"));
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function edit(Request $request, $id)
+    {
+        $loginUser = Auth::guard('admin')->user();
+        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
+
+        //オーナーかログインユーザー本人でなければ閲覧不可
+        if( !$loginUser->is_owner
+            && (!$adminUser || $loginUser->id !== $adminUser->id) )
+        {
+            return \App::abort(403);
+        }
+
+        $updateData = [
+            "name"=>$request->input("name")
+            ,"email"=>$request->input("email")
+        ];
+        $valiRole = [
+            "name"=>"required|string|max:255"
+            ,"email"=>[
+                "required"
+                ,"string"
+                ,"email"
+                ,"max:255"
+                ,function($attribute, $value, $fail) use($adminUser)
+                {
+                    $au = AdminUser::select(["id"])
+                        ->where("email", "=", $value)->where("id", "!=", $adminUser->id)
+                        ->first();
+                    if($au) return $fail("既に登録されているメールアドレスです。");
+                }
+            ]
+        ];
+        if($request->has("password") && strlen($request->input("password")) > 0)
+        {
+            $updateData["password"] = \Hash::make($request->input("password"));
+            $valiRole["password"] = "min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation";
+        }
+        $vali = \Validator::make($request->all()
+            ,$valiRole
+            ,[
+                "name.required"=>"ログイン名は必須です。"
+                ,"name.max"=>"名前は255文字以内です。"
+                ,"email.required"=>"メールアドレスは必須です。"
+                ,"email.email"=>"メールアドレスの形式が不正です。"
+                ,"email.max"=>"メールアドレスは255文字以内です。"
+                ,"password.min"=>"パスワードが4文字以下です。"
+                ,"password.regex"=>"パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。"
+                ,"password.same"=>"パスワードが確認と一致していません。"
+            ]
+        );
+
+        if($vali->fails())
+        {
+            return redirect()->route("admin.admin_users_edit_page", ["id"=>$adminUser->id])->withErrors($vali->errors())->withInput();
+        }
+
+        AdminUser::where("id", "=", $adminUser->id)->update($updateData);
+        return redirect()->route("admin.admin_users_detail", ["id"=>$adminUser->id]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|void
      */
     public function delete(Request $request, $id)
     {

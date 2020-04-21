@@ -2,13 +2,17 @@
 
 @section('content')
 <ul class="list-inline pt-3">
+    @if(auth('admin')->user()->is_owner)
     <li class="list-inline-item">
         <a href="{{ route("admin.admin_users_list") }}" class="btn btn-light">一覧</a>
     </li>
+    @endif
+    @if( auth('admin')->user()->is_owner || auth('admin')->user()->id === $adminUser->id )
     <li class="list-inline-item">
-        <a href="#" class="btn btn-success">編集</a>
+        <a href="{{ route("admin.admin_users_edit_page", ["id"=>$adminUser->id]) }}" class="btn btn-success">編集</a>
     </li>
-{{--    @if( auth('admin')->user()->is_owner && auth('admin')->user()->id !== $adminUser->id )--}}
+    @endif
+    @if( auth('admin')->user()->is_owner && auth('admin')->user()->id !== $adminUser->id )
     <li class="list-inline-item">
         <form action="{{ route("admin.admin_users_delete", ["id"=>$adminUser->id]) }}" method="POST">
             @method('DELETE')
@@ -16,7 +20,7 @@
             <button type="submit" class="btn btn-danger">削除</button>
         </form>
     </li>
-{{--    @endif--}}
+    @endif
 </ul>
 
 <table class="table">
