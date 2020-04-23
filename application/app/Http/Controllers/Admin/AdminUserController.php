@@ -16,11 +16,6 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         //オーナー権限ユーザーのみ利用可
-        $loginUser = Auth::guard('admin')->user();
-        if (!$loginUser->is_owner) {
-            return \App::abort(403);
-        }
-
         $para = $request->all();
         $pageUnit = isset($para["page_unit"]) && ctype_digit($para["page_unit"]) ? $para["page_unit"] : 10;
         $bldAdminUsers = AdminUser::select(["id", "name", "email", "is_owner"]);
@@ -74,15 +69,8 @@ class AdminUserController extends Controller
      */
     public function detail(Request $request, $id)
     {
-        $loginUser = Auth::guard('admin')->user();
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
-
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        if (!$loginUser->is_owner
-            && (!$adminUser || $loginUser->id !== $adminUser->id)) {
-            return \App::abort(403);
-        }
-
+        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
         return view('admin.users_detail', compact("adminUser"));
     }
 
@@ -92,10 +80,6 @@ class AdminUserController extends Controller
     public function createPage()
     {
         //オーナー権限ユーザーのみ利用可
-        $loginUser = Auth::guard('admin')->user();
-        if (!$loginUser->is_owner) {
-            return \App::abort(403);
-        }
         return view('admin.users_create');
     }
 
@@ -106,11 +90,6 @@ class AdminUserController extends Controller
     public function create(Request $request)
     {
         //オーナー権限ユーザーのみ利用可
-        $loginUser = Auth::guard('admin')->user();
-        if (!$loginUser->is_owner) {
-            return \App::abort(403);
-        }
-
         $vali = \Validator::make($request->all(),
             [
                 "name" => "required|string|max:255"
@@ -161,17 +140,10 @@ class AdminUserController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
-    public function edit_page(Request $request, $id)
+    public function editPage(Request $request, $id)
     {
-        $loginUser = Auth::guard('admin')->user();
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
-
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        if (!$loginUser->is_owner
-            && (!$adminUser || $loginUser->id !== $adminUser->id)) {
-            return \App::abort(403);
-        }
-
+        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
         return view('admin.users_edit', compact("adminUser"));
     }
 
@@ -182,14 +154,8 @@ class AdminUserController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $loginUser = Auth::guard('admin')->user();
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
-
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        if (!$loginUser->is_owner
-            && (!$adminUser || $loginUser->id !== $adminUser->id)) {
-            return \App::abort(403);
-        }
+        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
 
         $updateData = [
             "name" => $request->input("name"),
@@ -247,13 +213,6 @@ class AdminUserController extends Controller
     public function delete(Request $request, $id)
     {
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        $loginUser = Auth::guard('admin')->user();
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
-
-        if (!$loginUser->is_owner || !$adminUser || $loginUser->id === $adminUser->id) {
-            return \App::abort(403);
-        }
-
         AdminUser::where("id", "=", $id)->delete();
         return redirect()->route("admin.admin_users_list");
     }

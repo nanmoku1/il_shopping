@@ -65,13 +65,15 @@
                             顧客管理
                         </a>
                     </li>
-                    @if(auth('admin')->user()->is_owner)
+
+                    @can('manager-admin-only')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route("admin.admin_users_list") }}">
                             管理者管理
                         </a>
                     </li>
-                    @endif
+                    @endcan
+
                 </ul>
             </div>
         </nav>
