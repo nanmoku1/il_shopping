@@ -128,7 +128,7 @@ class AdminUserController extends Controller
         );
 
         if ($vali->fails()) {
-            return redirect()->route("admin.admin_users_create")->withErrors($vali->errors())->withInput();
+            return redirect()->route("admin.admin_user.create")->withErrors($vali->errors())->withInput();
         }
 
         $create_admin_user = AdminUser::create([
@@ -138,7 +138,7 @@ class AdminUserController extends Controller
             "is_owner" => $request->input("is_owner"),
         ]);
 
-        return redirect()->route("admin.admin_users_show", $create_admin_user->id);
+        return redirect()->route("admin.admin_user.show", $create_admin_user->id);
     }
 
     /**
@@ -200,12 +200,12 @@ class AdminUserController extends Controller
         );
 
         if ($vali->fails()) {
-            return redirect()->route("admin.admin_users_edit",
+            return redirect()->route("admin.admin_user.edit",
                 $admin_user->id)->withErrors($vali->errors())->withInput();
         }
 
         AdminUser::where("id", "=", $admin_user->id)->update($updateData);
-        return redirect()->route("admin.admin_users_show", $admin_user->id);
+        return redirect()->route("admin.admin_user.show", $admin_user->id);
     }
 
     /**
@@ -218,6 +218,6 @@ class AdminUserController extends Controller
     {
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
         $admin_user->delete();
-        return redirect()->route("admin.admin_users_index");
+        return redirect()->route("admin.admin_user.index");
     }
 }

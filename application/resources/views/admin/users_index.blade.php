@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <form class="shadow p-3 mt-3" action={{ route("admin.admin_users_index") }}>
+    <form class="shadow p-3 mt-3" action={{ route("admin.admin_user.index") }}>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <input type="text" class="form-control" id="name" name="name" value="{{ isset($parameter["name"]) ? $parameter["name"]:"" }}" placeholder="名称" />
@@ -58,7 +58,7 @@
 
     <ul class="list-inline pt-3">
         <li class="list-inline-item">
-            <a href="{{ route("admin.admin_users_create") }}" class="btn btn-success">新規</a>
+            <a href="{{ route("admin.admin_user.create") }}" class="btn btn-success">新規</a>
         </li>
     </ul>
 
@@ -76,7 +76,7 @@
             @foreach($admin_users as $admin_user)
                 <tr>
                     <td>{{ $admin_user->id }}</td>
-                    <td><a href="{{ route("admin.admin_users_show", $admin_user->id) }}">{{ $admin_user->name }}</a></td>
+                    <td><a href="{{ route("admin.admin_user.show", $admin_user->id) }}">{{ $admin_user->name }}</a></td>
                     <td>{{ $admin_user->email }}</td>
                     <td>{{ $admin_user->is_owner ? "オーナー":"一般" }}</td>
                 </tr>
