@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        \App\Models\AdminUser::class => \App\Policies\Admin\AdminUserPolicy::class,
     ];
 
     /**
@@ -25,26 +25,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //管理ページ認可
-        //オーナー権限ユーザーのみ利用可
-        Gate::define('manager-admin-only', function (AdminUser $user) {
-            return $user->is_owner;
-        });
-        //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        Gate::define('manager-admin-or-me', function (AdminUser $user, AdminUser $adminUser) {
-            if (!$user->is_owner
-                && (!$adminUser || $user->id !== $adminUser->id)) {
-                return false;
-            }
-            return true;
-        });
-        //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        Gate::define('manager-admin-and-not-me', function (AdminUser $user, AdminUser $adminUser) {
-            if (!$user->is_owner || !$adminUser || $user->id === $adminUser->id) {
-                return false;
-            }
-            return true;
-        });
     }
 }

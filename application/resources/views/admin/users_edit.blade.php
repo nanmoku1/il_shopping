@@ -3,7 +3,7 @@
 @section('content')
 <div class="row pt-3">
     <div class="col-sm">
-        <form action="{{ route("admin.admin_users_edit", $adminUser->id) }}" method="POST">
+        <form action="{{ route("admin.admin_users_update", $adminUser->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -50,7 +50,7 @@
 
             <ul class="list-inline">
                 <li class="list-inline-item">
-                    <a href="{{ route("admin.admin_users_detail", $adminUser->id) }}" class="btn btn-secondary">キャンセル</a>
+                    <a href="{{ route("admin.admin_users_show", $adminUser->id) }}" class="btn btn-secondary">キャンセル</a>
                 </li>
                 <li class="list-inline-item">
                     <button type="submit" class="btn btn-primary">更新</button>

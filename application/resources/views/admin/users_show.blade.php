@@ -2,19 +2,19 @@
 
 @section('content')
 <ul class="list-inline pt-3">
-    @can('manager-admin-only')
+    @can('viewAny', \App\Models\AdminUser::class)
     <li class="list-inline-item">
-        <a href="{{ route("admin.admin_users_list") }}" class="btn btn-light">一覧</a>
+        <a href="{{ route("admin.admin_users_index") }}" class="btn btn-light">一覧</a>
     </li>
     @endcan
-    @can('manager-admin-or-me', $adminUser)
+    @can('update', $adminUser)
     <li class="list-inline-item">
-        <a href="{{ route("admin.admin_users_edit_page", $adminUser->id) }}" class="btn btn-success">編集</a>
+        <a href="{{ route("admin.admin_users_edit", $adminUser->id) }}" class="btn btn-success">編集</a>
     </li>
     @endcan
-    @can('manager-admin-and-not-me', $adminUser)
+    @can('delete', $adminUser)
     <li class="list-inline-item">
-        <form action="{{ route("admin.admin_users_delete", ["id"=>$adminUser->id]) }}" method="POST">
+        <form action="{{ route("admin.admin_users_destroy", $adminUser->id) }}" method="POST">
             @method('DELETE')
             @csrf
             <button type="submit" class="btn btn-danger">削除</button>
