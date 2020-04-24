@@ -7,12 +7,12 @@
         <a href="{{ route("admin.admin_users_list") }}" class="btn btn-light">一覧</a>
     </li>
     @endcan
-    @can('manager-admin-or-me', $adminUser->id)
+    @can('manager-admin-or-me', $adminUser)
     <li class="list-inline-item">
-        <a href="{{ route("admin.admin_users_edit_page", ["id"=>$adminUser->id]) }}" class="btn btn-success">編集</a>
+        <a href="{{ route("admin.admin_users_edit_page", $adminUser->id) }}" class="btn btn-success">編集</a>
     </li>
     @endcan
-    @can('manager-admin-and-not-me', $adminUser->id)
+    @can('manager-admin-and-not-me', $adminUser)
     <li class="list-inline-item">
         <form action="{{ route("admin.admin_users_delete", ["id"=>$adminUser->id]) }}" method="POST">
             @method('DELETE')

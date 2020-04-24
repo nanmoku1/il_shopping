@@ -33,7 +33,7 @@
                     {{ auth('admin')->user()->name }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route("admin.admin_users_detail", ["id"=>auth("admin")->user()->id]) }}">管理者情報編集</a>
+                    <a class="dropdown-item" href="{{ route("admin.admin_users_detail", auth("admin")->user()->id) }}">管理者情報編集</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">ログアウト</a>
                     <form id="logout-form" class="d-none" action="{{ route('admin.logout') }}" method="POST">

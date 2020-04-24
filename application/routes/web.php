@@ -36,14 +36,14 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
             Route::post('admin_users', 'AdminUserController@create')->name('admin_users_create');
         });
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        Route::middleware('can:manager-admin-or-me,id')->group(function () {
-            Route::get('admin_users/{id}', 'AdminUserController@detail')->name('admin_users_detail');
-            Route::get('admin_users/{id}/edit', 'AdminUserController@editPage')->name('admin_users_edit_page');
-            Route::put('admin_users/edit/{id}', 'AdminUserController@edit')->name('admin_users_edit');;
+        Route::middleware('can:manager-admin-or-me,adminUser')->group(function () {
+            Route::get('admin_users/{adminUser}', 'AdminUserController@detail')->name('admin_users_detail');
+            Route::get('admin_users/{adminUser}/edit', 'AdminUserController@editPage')->name('admin_users_edit_page');
+            Route::put('admin_users/edit/{adminUser}', 'AdminUserController@edit')->name('admin_users_edit');;
         });
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        Route::middleware('can:manager-admin-and-not-me,id')->group(function () {
-            Route::delete('admin_users/{id}', 'AdminUserController@delete')->name('admin_users_delete');
+        Route::middleware('can:manager-admin-and-not-me,adminUser')->group(function () {
+            Route::delete('admin_users/{adminUser}', 'AdminUserController@delete')->name('admin_users_delete');
         });
     });
 });

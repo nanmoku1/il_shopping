@@ -11,7 +11,7 @@ class AdminUserController extends Controller
 {
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -64,18 +64,17 @@ class AdminUserController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     * @param AdminUser $adminUser
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function detail(Request $request, $id)
+    public function detail(Request $request, AdminUser $adminUser)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
         return view('admin.users_detail', compact("adminUser"));
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function createPage()
     {
@@ -85,7 +84,7 @@ class AdminUserController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|void
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function create(Request $request)
     {
@@ -132,18 +131,17 @@ class AdminUserController extends Controller
             "is_owner" => $request->input("is_owner"),
         ]);
 
-        return redirect()->route("admin.admin_users_detail", ["id" => $cAU->id]);
+        return redirect()->route("admin.admin_users_detail", $cAU->id);
     }
 
     /**
      * @param Request $request
-     * @param $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     * @param AdminUser $adminUser
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function editPage(Request $request, $id)
+    public function editPage(Request $request, AdminUser $adminUser)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
         return view('admin.users_edit', compact("adminUser"));
     }
 
@@ -152,11 +150,9 @@ class AdminUserController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|void
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, AdminUser $adminUser)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
-
         $updateData = [
             "name" => $request->input("name"),
             "email" => $request->input("email"),
@@ -198,22 +194,22 @@ class AdminUserController extends Controller
 
         if ($vali->fails()) {
             return redirect()->route("admin.admin_users_edit_page",
-                ["id" => $adminUser->id])->withErrors($vali->errors())->withInput();
+                $adminUser->id)->withErrors($vali->errors())->withInput();
         }
 
         AdminUser::where("id", "=", $adminUser->id)->update($updateData);
-        return redirect()->route("admin.admin_users_detail", ["id" => $adminUser->id]);
+        return redirect()->route("admin.admin_users_detail", $adminUser->id);
     }
 
     /**
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse|void
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete(Request $request, $id)
+    public function delete(Request $request, AdminUser $adminUser)
     {
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        AdminUser::where("id", "=", $id)->delete();
+        $adminUser->delete();
         return redirect()->route("admin.admin_users_list");
     }
 }

@@ -32,8 +32,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->is_owner;
         });
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        Gate::define('manager-admin-or-me', function (AdminUser $user, $id) {
-            $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
+        Gate::define('manager-admin-or-me', function (AdminUser $user, AdminUser $adminUser) {
             if (!$user->is_owner
                 && (!$adminUser || $user->id !== $adminUser->id)) {
                 return false;
@@ -41,8 +40,7 @@ class AuthServiceProvider extends ServiceProvider
             return true;
         });
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        Gate::define('manager-admin-and-not-me', function (AdminUser $user, $id) {
-            $adminUser = AdminUser::select(["id", "name", "email", "is_owner"])->where("id", "=", $id)->first();
+        Gate::define('manager-admin-and-not-me', function (AdminUser $user, AdminUser $adminUser) {
             if (!$user->is_owner || !$adminUser || $user->id === $adminUser->id) {
                 return false;
             }
