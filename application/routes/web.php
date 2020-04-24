@@ -33,13 +33,13 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
         Route::get('admin_users/create', 'AdminUserController@create')->name('admin_users_create');
         Route::post('admin_users', 'AdminUserController@store')->name('admin_users_store');
 
-        Route::get('admin_users/{adminUser}/edit', 'AdminUserController@edit')->name('admin_users_edit');
-        Route::put('admin_users/edit/{adminUser}', 'AdminUserController@update')->name('admin_users_update');
+        Route::get('admin_users/{admin_user}/edit', 'AdminUserController@edit')->name('admin_users_edit');
+        Route::put('admin_users/edit/{admin_user}', 'AdminUserController@update')->name('admin_users_update');
 
         Route::get('admin_users', 'AdminUserController@index')->name('admin_users_index');
-        Route::get('admin_users/{adminUser}', 'AdminUserController@show')->name('admin_users_show');
+        Route::get('admin_users/{admin_user}', 'AdminUserController@show')->name('admin_users_show');
 
-        Route::delete('admin_users/{adminUser}', 'AdminUserController@destroy')->name('admin_users_destroy');
+        Route::delete('admin_users/{admin_user}', 'AdminUserController@destroy')->name('admin_users_destroy');
     });
 });
 

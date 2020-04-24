@@ -13,7 +13,7 @@ class AdminUserController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(AdminUser::class, "adminUser");
+        $this->authorizeResource(AdminUser::class, "admin_user");
     }
 
     /**
@@ -23,61 +23,61 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         //オーナー権限ユーザーのみ利用可
-        $para = $request->all();
-        $pageUnit = isset($para["page_unit"]) && ctype_digit($para["page_unit"]) ? $para["page_unit"] : 10;
-        $bldAdminUsers = AdminUser::select(["id", "name", "email", "is_owner"]);
-        if (isset($para["name"])) {
-            $bldAdminUsers->where("name", "like", "%{$para['name']}%");
+        $parameter = $request->all();
+        $page_unit = isset($parameter["page_unit"]) && ctype_digit($parameter["page_unit"]) ? $parameter["page_unit"] : 10;
+        $builder_admin_users = AdminUser::select(["id", "name", "email", "is_owner"]);
+        if (isset($parameter["name"])) {
+            $builder_admin_users->where("name", "like", "%{$parameter['name']}%");
         }
-        if (isset($para["email"])) {
-            $bldAdminUsers->where("email", "like", "{$para['email']}%");
+        if (isset($parameter["email"])) {
+            $builder_admin_users->where("email", "like", "{$parameter['email']}%");
         }
-        if (isset($para["authority"])) {
-            $bldAdminUsers->where("is_owner", "=", $para["authority"]);
+        if (isset($parameter["authority"])) {
+            $builder_admin_users->where("is_owner", "=", $parameter["authority"]);
         }
-        $orderKey = null;
-        if (isset($para["sort_column"])) {
-            switch ($para["sort_column"]) {
+        $order_key = null;
+        if (isset($parameter["sort_column"])) {
+            switch ($parameter["sort_column"]) {
                 case "id":
-                    $orderKey = "id";
+                    $order_key = "id";
                     break;
                 case "name":
-                    $orderKey = "name";
+                    $order_key = "name";
                     break;
                 case "email":
-                    $orderKey = "email";
+                    $order_key = "email";
                     break;
             }
         }
-        if ($orderKey && isset($para["sort_direction"])) {
-            $ad = null;
-            switch ($para["sort_direction"]) {
+        if ($order_key && isset($parameter["sort_direction"])) {
+            $asc_desc = null;
+            switch ($parameter["sort_direction"]) {
                 case "asc":
-                    $ad = "ASC";
+                    $asc_desc = "ASC";
                     break;
                 case "desc":
-                    $ad = "DESC";
+                    $asc_desc = "DESC";
                     break;
             }
 
-            if ($ad) {
-                $bldAdminUsers->orderBy($orderKey, $ad);
+            if ($asc_desc) {
+                $builder_admin_users->orderBy($order_key, $asc_desc);
             }
         }
 
-        $adminUsers = $bldAdminUsers->paginate($pageUnit);
-        return view('admin.users_index', compact("adminUsers", "para"));
+        $admin_users = $builder_admin_users->paginate($page_unit);
+        return view('admin.users_index', compact("admin_users", "parameter"));
     }
 
     /**
      * @param Request $request
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Request $request, AdminUser $adminUser)
+    public function show(Request $request, AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        return view('admin.users_show', compact("adminUser"));
+        return view('admin.users_show', compact("admin_user"));
     }
 
     /**
@@ -106,8 +106,8 @@ class AdminUserController extends Controller
                     "email",
                     "max:255",
                     function ($attribute, $value, $fail) {
-                        $au = AdminUser::select(["id"])->where("email", "=", $value)->first();
-                        if ($au) {
+                        $admin_user = AdminUser::select(["id"])->where("email", "=", $value)->first();
+                        if ($admin_user) {
                             return $fail("既に登録されているメールアドレスです。");
                         }
                     },
@@ -131,33 +131,33 @@ class AdminUserController extends Controller
             return redirect()->route("admin.admin_users_create")->withErrors($vali->errors())->withInput();
         }
 
-        $cAU = AdminUser::create([
+        $create_admin_user = AdminUser::create([
             "name" => $request->input("name"),
             "email" => $request->input("email"),
             "password" => \Hash::make($request->input("password")),
             "is_owner" => $request->input("is_owner"),
         ]);
 
-        return redirect()->route("admin.admin_users_show", $cAU->id);
+        return redirect()->route("admin.admin_users_show", $create_admin_user->id);
     }
 
     /**
      * @param Request $request
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Request $request, AdminUser $adminUser)
+    public function edit(Request $request, AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        return view('admin.users_edit', compact("adminUser"));
+        return view('admin.users_edit', compact("admin_user"));
     }
 
     /**
      * @param Request $request
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, AdminUser $adminUser)
+    public function update(Request $request, AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         $updateData = [
@@ -171,9 +171,9 @@ class AdminUserController extends Controller
                 "string",
                 "email",
                 "max:255",
-                function ($attribute, $value, $fail) use ($adminUser) {
+                function ($attribute, $value, $fail) use ($admin_user) {
                     $au = AdminUser::select(["id"])
-                        ->where("email", "=", $value)->where("id", "!=", $adminUser->id)
+                        ->where("email", "=", $value)->where("id", "!=", $admin_user->id)
                         ->first();
                     if ($au) {
                         return $fail("既に登録されているメールアドレスです。");
@@ -201,23 +201,23 @@ class AdminUserController extends Controller
 
         if ($vali->fails()) {
             return redirect()->route("admin.admin_users_edit",
-                $adminUser->id)->withErrors($vali->errors())->withInput();
+                $admin_user->id)->withErrors($vali->errors())->withInput();
         }
 
-        AdminUser::where("id", "=", $adminUser->id)->update($updateData);
-        return redirect()->route("admin.admin_users_show", $adminUser->id);
+        AdminUser::where("id", "=", $admin_user->id)->update($updateData);
+        return redirect()->route("admin.admin_users_show", $admin_user->id);
     }
 
     /**
      * @param Request $request
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy(Request $request, AdminUser $adminUser)
+    public function destroy(Request $request, AdminUser $admin_user)
     {
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        $adminUser->delete();
+        $admin_user->delete();
         return redirect()->route("admin.admin_users_index");
     }
 }

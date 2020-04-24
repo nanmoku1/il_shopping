@@ -7,14 +7,14 @@
         <a href="{{ route("admin.admin_users_index") }}" class="btn btn-light">一覧</a>
     </li>
     @endcan
-    @can('update', $adminUser)
+    @can('update', $admin_user)
     <li class="list-inline-item">
-        <a href="{{ route("admin.admin_users_edit", $adminUser->id) }}" class="btn btn-success">編集</a>
+        <a href="{{ route("admin.admin_users_edit", $admin_user->id) }}" class="btn btn-success">編集</a>
     </li>
     @endcan
-    @can('delete', $adminUser)
+    @can('delete', $admin_user)
     <li class="list-inline-item">
-        <form action="{{ route("admin.admin_users_destroy", $adminUser->id) }}" method="POST">
+        <form action="{{ route("admin.admin_users_destroy", $admin_user->id) }}" method="POST">
             @method('DELETE')
             @csrf
             <button type="submit" class="btn btn-danger">削除</button>
@@ -27,19 +27,19 @@
     <tbody>
         <tr>
             <th>ID</th>
-            <td>{{ $adminUser->id }}</td>
+            <td>{{ $admin_user->id }}</td>
         </tr>
         <tr>
             <th>名称</th>
-            <td>{{ $adminUser->name }}</td>
+            <td>{{ $admin_user->name }}</td>
         </tr>
         <tr>
             <th>メールアドレス</th>
-            <td>{{ $adminUser->email }}</td>
+            <td>{{ $admin_user->email }}</td>
         </tr>
         <tr>
             <th>権限</th>
-            <td>{{ $adminUser->is_owner ? "オーナー":"一般" }}</td>
+            <td>{{ $admin_user->is_owner ? "オーナー":"一般" }}</td>
         </tr>
     </tbody>
 </table>

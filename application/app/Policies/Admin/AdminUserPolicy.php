@@ -24,17 +24,17 @@ class AdminUserPolicy
 
     /**
      * @param AdminUser $user
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return bool
      */
-    public function view(AdminUser $user, AdminUser $adminUser)
+    public function view(AdminUser $user, AdminUser $admin_user)
     {
-        return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $adminUser);
+        return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $admin_user);
     }
 
     /**
      * @param AdminUser $user
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return bool
      */
     public function create(AdminUser $user)
@@ -44,42 +44,42 @@ class AdminUserPolicy
 
     /**
      * @param AdminUser $user
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return bool
      */
-    public function update(AdminUser $user, AdminUser $adminUser)
+    public function update(AdminUser $user, AdminUser $admin_user)
     {
-        return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $adminUser);
+        return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $admin_user);
     }
 
     /**
      * @param AdminUser $user
-     * @param AdminUser $adminUser
+     * @param AdminUser $admin_user
      * @return bool
      */
-    public function delete(AdminUser $user, AdminUser $adminUser)
+    public function delete(AdminUser $user, AdminUser $admin_user)
     {
-        return $this->_auth(self::MANAGER_ADMIN_AND_NOT_ME, $user, $adminUser);
+        return $this->_auth(self::MANAGER_ADMIN_AND_NOT_ME, $user, $admin_user);
     }
 
     /**
      * @param int $type
      * @param AdminUser $user
-     * @param AdminUser|null $adminUser
+     * @param AdminUser|null $admin_user
      * @return bool
      */
-    protected function _auth(int $type, AdminUser $user, AdminUser $adminUser = null)
+    protected function _auth(int $type, AdminUser $user, AdminUser $admin_user = null)
     {
         switch ($type) {
             case self::MANAGER_ADMIN_OR_ME:
                 if (!$user->is_owner
-                    && (!$adminUser || $user->id !== $adminUser->id)) {
+                    && (!$admin_user || $user->id !== $admin_user->id)) {
                     return false;
                 }
                 return true;
                 break;
             case self::MANAGER_ADMIN_AND_NOT_ME:
-                if (!$user->is_owner || !$adminUser || $user->id === $adminUser->id) {
+                if (!$user->is_owner || !$admin_user || $user->id === $admin_user->id) {
                     return false;
                 }
                 return true;
