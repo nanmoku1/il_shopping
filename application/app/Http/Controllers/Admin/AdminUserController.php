@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\AdminUserIndexRequest;
+use App\Http\Requests\Admin\AdminUserCreateRequest;
+use App\Http\Requests\Admin\AdminUserEditRequest;
 use App\Models\AdminUser;
 
 class AdminUserController extends Controller
@@ -17,27 +20,26 @@ class AdminUserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param AdminUserIndexRequest $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index(AdminUserIndexRequest $request)
     {
         //オーナー権限ユーザーのみ利用可
-        $parameter = $request->all();
-        $page_unit = isset($parameter["page_unit"]) && ctype_digit($parameter["page_unit"]) ? $parameter["page_unit"] : 10;
+        $page_unit = $request->pageUnit() !== null && ctype_digit($request->pageUnit()) ? $request->pageUnit() : 10;
         $builder_admin_users = AdminUser::select(["id", "name", "email", "is_owner"]);
-        if (isset($parameter["name"])) {
-            $builder_admin_users->where("name", "like", "%{$parameter['name']}%");
+        if ($request->name() !== null) {
+            $builder_admin_users->where("name", "like", "%{$request->name()}%");
         }
-        if (isset($parameter["email"])) {
-            $builder_admin_users->where("email", "like", "{$parameter['email']}%");
+        if ($request->email() !== null) {
+            $builder_admin_users->where("email", "like", "{$request->email()}%");
         }
-        if (isset($parameter["authority"])) {
-            $builder_admin_users->where("is_owner", "=", $parameter["authority"]);
+        if ($request->authority() !== null) {
+            $builder_admin_users->where("is_owner", "=", $request->authority());
         }
         $order_key = null;
-        if (isset($parameter["sort_column"])) {
-            switch ($parameter["sort_column"]) {
+        if ($request->sortColumn() !== null) {
+            switch ($request->sortColumn()) {
                 case "id":
                     $order_key = "id";
                     break;
@@ -49,9 +51,9 @@ class AdminUserController extends Controller
                     break;
             }
         }
-        if ($order_key && isset($parameter["sort_direction"])) {
+        if ($order_key && $request->sortDirection() !== null) {
             $asc_desc = null;
-            switch ($parameter["sort_direction"]) {
+            switch ($request->sortDirection()) {
                 case "asc":
                     $asc_desc = "ASC";
                     break;
@@ -66,15 +68,14 @@ class AdminUserController extends Controller
         }
 
         $admin_users = $builder_admin_users->paginate($page_unit);
-        return view('admin.users_index', compact("admin_users", "parameter"));
+        return view('admin.users_index', compact("admin_users", "request"));
     }
 
     /**
-     * @param Request $request
      * @param AdminUser $admin_user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Request $request, AdminUser $admin_user)
+    public function show(AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         return view('admin.users_show', compact("admin_user"));
@@ -90,131 +91,58 @@ class AdminUserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param AdminUserCreateRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(AdminUserCreateRequest $request)
     {
-        //オーナー権限ユーザーのみ利用可
-        $vali = \Validator::make($request->all(),
-            [
-                "name" => "required|string|max:255"
-                ,
-                "email" => [
-                    "required",
-                    "string",
-                    "email",
-                    "max:255",
-                    function ($attribute, $value, $fail) {
-                        $admin_user = AdminUser::select(["id"])->where("email", "=", $value)->first();
-                        if ($admin_user) {
-                            return $fail("既に登録されているメールアドレスです。");
-                        }
-                    },
-                ],
-                "password" => "required|min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation",
-            ],
-            [
-                "name.required" => "ログイン名は必須です。",
-                "name.max" => "名前は255文字以内です。",
-                "email.required" => "メールアドレスは必須です。",
-                "email.email" => "メールアドレスの形式が不正です。",
-                "email.max" => "メールアドレスは255文字以内です。",
-                "password.required" => "パスワードは必須です。",
-                "password.min" => "パスワードが4文字以下です。",
-                "password.regex" => "パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。",
-                "password.same" => "パスワードが確認と一致していません。",
-            ]
-        );
-
-        if ($vali->fails()) {
-            return redirect()->route("admin.admin_user.create")->withErrors($vali->errors())->withInput();
-        }
-
         $create_admin_user = AdminUser::create([
-            "name" => $request->input("name"),
-            "email" => $request->input("email"),
-            "password" => \Hash::make($request->input("password")),
-            "is_owner" => $request->input("is_owner"),
+            "name" => $request->name(),
+            "email" => $request->email(),
+            "password" => \Hash::make($request->password()),
+            "is_owner" => $request->isOwner(),
         ]);
 
         return redirect()->route("admin.admin_user.show", $create_admin_user->id);
     }
 
     /**
-     * @param Request $request
      * @param AdminUser $admin_user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Request $request, AdminUser $admin_user)
+    public function edit(AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         return view('admin.users_edit', compact("admin_user"));
     }
 
     /**
-     * @param Request $request
+     * @param AdminUserEditRequest $request
      * @param AdminUser $admin_user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, AdminUser $admin_user)
+    public function update(AdminUserEditRequest $request, AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         $updateData = [
-            "name" => $request->input("name"),
-            "email" => $request->input("email"),
+            "name" => $request->name(),
+            "email" => $request->email(),
         ];
-        $valiRole = [
-            "name" => "required|string|max:255",
-            "email" => [
-                "required",
-                "string",
-                "email",
-                "max:255",
-                function ($attribute, $value, $fail) use ($admin_user) {
-                    $au = AdminUser::select(["id"])
-                        ->where("email", "=", $value)->where("id", "!=", $admin_user->id)
-                        ->first();
-                    if ($au) {
-                        return $fail("既に登録されているメールアドレスです。");
-                    }
-                },
-            ]
-        ];
-        if ($request->has("password") && strlen($request->input("password")) > 0) {
-            $updateData["password"] = \Hash::make($request->input("password"));
-            $valiRole["password"] = "min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation";
-        }
-        $vali = \Validator::make($request->all(),
-            $valiRole,
-            [
-                "name.required" => "ログイン名は必須です。",
-                "name.max" => "名前は255文字以内です。",
-                "email.required" => "メールアドレスは必須です。",
-                "email.email" => "メールアドレスの形式が不正です。",
-                "email.max" => "メールアドレスは255文字以内です。",
-                "password.min" => "パスワードが4文字以下です。",
-                "password.regex" => "パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。",
-                "password.same" => "パスワードが確認と一致していません。",
-            ]
-        );
 
-        if ($vali->fails()) {
-            return redirect()->route("admin.admin_user.edit",
-                $admin_user->id)->withErrors($vali->errors())->withInput();
+        if ($request->has("password")) {
+            $updateData["password"] = \Hash::make($request->password());
         }
 
-        AdminUser::where("id", "=", $admin_user->id)->update($updateData);
+        $admin_user->update($updateData);
         return redirect()->route("admin.admin_user.show", $admin_user->id);
     }
 
     /**
-     * @param Request $request
      * @param AdminUser $admin_user
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy(Request $request, AdminUser $admin_user)
+    public function destroy(AdminUser $admin_user)
     {
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
         $admin_user->delete();
