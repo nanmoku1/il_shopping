@@ -19,6 +19,7 @@ class AdminUserPolicy
      */
     public function viewAny(AdminUser $user)
     {
+        //オーナー権限ユーザーのみ利用可
         return $this->_auth(self::MANAGER_ADMIN_ONLY, $user);
     }
 
@@ -29,6 +30,7 @@ class AdminUserPolicy
      */
     public function view(AdminUser $user, AdminUser $admin_user)
     {
+        //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $admin_user);
     }
 
@@ -39,6 +41,7 @@ class AdminUserPolicy
      */
     public function create(AdminUser $user)
     {
+        //オーナー権限ユーザーのみ利用可
         return $this->_auth(self::MANAGER_ADMIN_ONLY, $user);
     }
 
@@ -49,6 +52,7 @@ class AdminUserPolicy
      */
     public function update(AdminUser $user, AdminUser $admin_user)
     {
+        //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
         return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $admin_user);
     }
 
@@ -59,6 +63,7 @@ class AdminUserPolicy
      */
     public function delete(AdminUser $user, AdminUser $admin_user)
     {
+        //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
         return $this->_auth(self::MANAGER_ADMIN_AND_NOT_ME, $user, $admin_user);
     }
 
