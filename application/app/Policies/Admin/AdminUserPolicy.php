@@ -9,87 +9,56 @@ class AdminUserPolicy
 {
     use HandlesAuthorization;
 
-    protected const MANAGER_ADMIN_ONLY = 1;
-    protected const MANAGER_ADMIN_OR_ME = 2;
-    protected const MANAGER_ADMIN_AND_NOT_ME = 3;
-
     /**
-     * @param AdminUser $user
+     * @param AdminUser $login_user
      * @return bool
      */
-    public function viewAny(AdminUser $user)
+    public function viewAny(AdminUser $login_user)
     {
         //オーナー権限ユーザーのみ利用可
-        return $this->_auth(self::MANAGER_ADMIN_ONLY, $user);
+        return $login_user->is_owner;
     }
 
     /**
-     * @param AdminUser $user
+     * @param AdminUser $login_user
      * @param AdminUser $admin_user
      * @return bool
      */
-    public function view(AdminUser $user, AdminUser $admin_user)
+    public function view(AdminUser $login_user, AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $admin_user);
+        return $login_user->is_owner || $login_user->id === $admin_user->id;
     }
 
     /**
-     * @param AdminUser $user
-     * @param AdminUser $admin_user
+     * @param AdminUser $login_user
      * @return bool
      */
-    public function create(AdminUser $user)
+    public function create(AdminUser $login_user)
     {
         //オーナー権限ユーザーのみ利用可
-        return $this->_auth(self::MANAGER_ADMIN_ONLY, $user);
+        return $login_user->is_owner;
     }
 
     /**
-     * @param AdminUser $user
+     * @param AdminUser $login_user
      * @param AdminUser $admin_user
      * @return bool
      */
-    public function update(AdminUser $user, AdminUser $admin_user)
+    public function update(AdminUser $login_user, AdminUser $admin_user)
     {
         //オーナー権限ユーザーかログインユーザー本人でなければ利用不可
-        return $this->_auth(self::MANAGER_ADMIN_OR_ME, $user, $admin_user);
+        return $login_user->is_owner || $login_user->id === $admin_user->id;
     }
 
     /**
-     * @param AdminUser $user
+     * @param AdminUser $login_user
      * @param AdminUser $admin_user
      * @return bool
      */
-    public function delete(AdminUser $user, AdminUser $admin_user)
+    public function delete(AdminUser $login_user, AdminUser $admin_user)
     {
         //オーナー権限ユーザーで、ログイン中のユーザー以外のユーザーのみ利用可
-        return $this->_auth(self::MANAGER_ADMIN_AND_NOT_ME, $user, $admin_user);
-    }
-
-    /**
-     * @param int $type
-     * @param AdminUser $user
-     * @param AdminUser|null $admin_user
-     * @return bool
-     */
-    protected function _auth(int $type, AdminUser $user, AdminUser $admin_user = null)
-    {
-        switch ($type) {
-            case self::MANAGER_ADMIN_OR_ME:
-                if (!$user->is_owner
-                    && (!$admin_user || $user->id !== $admin_user->id)) {
-                    return false;
-                }
-                return true;
-                break;
-            case self::MANAGER_ADMIN_AND_NOT_ME:
-                if (!$user->is_owner || !$admin_user || $user->id === $admin_user->id) {
-                    return false;
-                }
-                return true;
-                break;
-        }
-        return $user->is_owner;
+        return $login_user->is_owner && $login_user->id !== $admin_user->id;
     }
 }
