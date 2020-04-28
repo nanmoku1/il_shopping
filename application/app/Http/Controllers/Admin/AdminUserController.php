@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Admin\AdminUserIndexRequest;
-use App\Http\Requests\Admin\AdminUserCreateRequest;
-use App\Http\Requests\Admin\AdminUserEditRequest;
+use App\Http\Requests\Admin\AdminUsers\AdminUserIndexRequest;
+use App\Http\Requests\Admin\AdminUsers\AdminUserCreateRequest;
+use App\Http\Requests\Admin\AdminUsers\AdminUserEditRequest;
 use App\Models\AdminUser;
 
 class AdminUserController extends Controller
@@ -41,7 +41,7 @@ class AdminUserController extends Controller
             ])
             ->paginate($page_unit);
 
-        return view('admin.users_index', compact("admin_users", "request"));
+        return view('admin.admin_users.index', compact("admin_users", "request"));
     }
 
     /**
@@ -50,7 +50,7 @@ class AdminUserController extends Controller
      */
     public function show(AdminUser $admin_user)
     {
-        return view('admin.users_show', compact("admin_user"));
+        return view('admin.admin_users.show', compact("admin_user"));
     }
 
     /**
@@ -58,7 +58,7 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        return view('admin.users_create');
+        return view('admin.admin_users.create');
     }
 
     /**
@@ -83,7 +83,7 @@ class AdminUserController extends Controller
      */
     public function edit(AdminUser $admin_user)
     {
-        return view('admin.users_edit', compact("admin_user"));
+        return view('admin.admin_users.edit', compact("admin_user"));
     }
 
     /**
