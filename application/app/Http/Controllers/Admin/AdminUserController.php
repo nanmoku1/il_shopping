@@ -74,7 +74,7 @@ class AdminUserController extends Controller
             "is_owner" => $request->isOwner(),
         ]);
 
-        return redirect()->route("admin.admin_user.show", $create_admin_user->id);
+        return redirect()->route("admin.admin_users.show", $create_admin_user->id);
     }
 
     /**
@@ -103,7 +103,7 @@ class AdminUserController extends Controller
         }
 
         $admin_user->update($updateData);
-        return redirect()->route("admin.admin_user.show", $admin_user->id);
+        return redirect()->route("admin.admin_users.show", $admin_user->id);
     }
 
     /**
@@ -114,6 +114,6 @@ class AdminUserController extends Controller
     public function destroy(AdminUser $admin_user)
     {
         $admin_user->delete();
-        return redirect()->route("admin.admin_user.index");
+        return redirect()->route("admin.admin_users.index");
     }
 }

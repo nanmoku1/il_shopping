@@ -3,7 +3,7 @@
 @section('content')
 <div class="row pt-3">
     <div class="col-sm">
-        <form action="{{ route("admin.admin_user.store") }}" method="POST">
+        <form action="{{ route("admin.admin_users.store") }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="name">名称</label>
@@ -53,7 +53,7 @@
 
             <ul class="list-inline">
                 <li class="list-inline-item">
-                    <a href="{{ route("admin.admin_user.index") }}" class="btn btn-secondary">キャンセル</a>
+                    <a href="{{ route("admin.admin_users.index") }}" class="btn btn-secondary">キャンセル</a>
                 </li>
                 <li class="list-inline-item">
                     <button type="submit" class="btn btn-primary">作成</button>

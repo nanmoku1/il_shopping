@@ -4,17 +4,17 @@
 <ul class="list-inline pt-3">
     @can('viewAny', \App\Models\AdminUser::class)
     <li class="list-inline-item">
-        <a href="{{ route("admin.admin_user.index") }}" class="btn btn-light">一覧</a>
+        <a href="{{ route("admin.admin_users.index") }}" class="btn btn-light">一覧</a>
     </li>
     @endcan
     @can('update', $admin_user)
     <li class="list-inline-item">
-        <a href="{{ route("admin.admin_user.edit", $admin_user->id) }}" class="btn btn-success">編集</a>
+        <a href="{{ route("admin.admin_users.edit", $admin_user->id) }}" class="btn btn-success">編集</a>
     </li>
     @endcan
     @can('delete', $admin_user)
     <li class="list-inline-item">
-        <form action="{{ route("admin.admin_user.destroy", $admin_user->id) }}" method="POST">
+        <form action="{{ route("admin.admin_users.destroy", $admin_user->id) }}" method="POST">
             @method('DELETE')
             @csrf
             <button type="submit" class="btn btn-danger">削除</button>
