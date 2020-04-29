@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Admin\AdminUsers\AdminUserIndexRequest;
 use App\Http\Requests\Admin\AdminUsers\AdminUserCreateRequest;
 use App\Http\Requests\Admin\AdminUsers\AdminUserEditRequest;
