@@ -25,21 +25,27 @@ class AdminUserController extends Controller
      */
     public function index(AdminUserIndexRequest $request)
     {
-        $page_unit = $request->pageUnit() !== null && ctype_digit($request->pageUnit()) ? $request->pageUnit() : 10;
-        $admin_users = AdminUser::listSearch([
-            "name" => $request->name(),
-            "email" => $request->email(),
-            "is_owner" => $request->authority(),
-            "order_key" => $request->sortColumn(),
-            "asc_desc" => $request->sortDirection(),
-        ])
-            ->select([
-                "id",
-                "name",
-                "email",
-                "is_owner",
-            ])
-            ->paginate($page_unit);
+        $builder_admin_user = AdminUser::select([
+            "id",
+            "name",
+            "email",
+            "is_owner",
+        ]);
+        if (!empty($request->name())) {
+            $builder_admin_user->FuzzyName($request->name());
+        }
+        if (!empty($request->email())) {
+            $builder_admin_user->FuzzyEmail($request->email());
+        }
+        if (!is_null($request->authority())) {
+            $builder_admin_user->whereIsOwner($request->authority());
+        }
+        if (!is_null($request->sortColumn()) && !is_null($request->sortDirection())) {
+            $builder_admin_user->sort($request->sortColumn(), $request->sortDirection());
+        } else {
+            $builder_admin_user->sort();
+        }
+        $admin_users = $builder_admin_user->paginate($request->pageUnit());
 
         return view('admin.admin_users.index', compact("admin_users", "request"));
     }

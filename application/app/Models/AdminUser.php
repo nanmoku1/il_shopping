@@ -15,10 +15,12 @@ use Illuminate\Database\Eloquent\Builder;
  * @property bool $is_owner
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser listSearch($conditions = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser fuzzyEmail($email)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser sort($sort_key = 'id', $sort_asc_desc = 'asc')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereId($value)
@@ -60,55 +62,51 @@ class AdminUser extends Authenticatable
 
     /**
      * @param Builder $query
-     * @param array $conditions
+     * @param string $name
+     */
+    public function scopeFuzzyName(Builder $query, string $name)
+    {
+        $query->where("name", "like", "%{$name}%");
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $email
+     */
+    public function scopeFuzzyEmail(Builder $query, string $email)
+    {
+        $query->where("email", "like", "{$email}%");
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $sort_key
+     * @param string $sort_asc_desc
      * @return Builder
      */
-    public function scopeListSearch(Builder $query, array $conditions = [])
+    public function scopeSort(Builder $query, string $sort_key = "id", string $sort_asc_desc = "asc")
     {
-        //名称
-        if (!empty($conditions["name"])) {
-            $query->where("name", "like", "%{$conditions["name"]}%");
-        }
-        //メールアドレス
-        if (!empty($conditions["email"])) {
-            $query->where("email", "like", "{$conditions["email"]}%");
-        }
-        //権限
-        if (isset($conditions["is_owner"])) {
-            $query->where("is_owner", "=", $conditions["is_owner"]);
-        }
-        //ソート
-        if (isset($conditions["order_key"])) {
-            $order_key = null;
-            switch ($conditions["order_key"]) {
-                case "id":
-                    $order_key = "id";
-                    break;
-                case "name":
-                    $order_key = "name";
-                    break;
-                case "email":
-                    $order_key = "email";
-                    break;
-            }
-
-            if ($order_key) {
-                $asc_desc = null;
-                if (isset($conditions["asc_desc"])) {
-                    switch ($conditions["asc_desc"]) {
-                        case "asc":
-                            $asc_desc = "ASC";
-                            break;
-                        case "desc":
-                            $asc_desc = "DESC";
-                            break;
-                    }
-                }
-
-                $query->orderBy($order_key, $asc_desc);
-            }
+        $order_by_key = null;
+        switch ($sort_key) {
+            case "name":
+                $order_by_key = "name";
+                break;
+            case "email":
+                $order_by_key = "email";
+                break;
+            default:
+                $order_by_key = "id";
         }
 
-        return $query;
+        $order_by_asc_desc = null;
+        switch ($sort_asc_desc) {
+            case "desc":
+                $order_by_asc_desc = "DESC";
+                break;
+            default:
+                $order_by_asc_desc = "ASC";
+        }
+
+        return $query->orderBy($order_by_key, $order_by_asc_desc);
     }
 }

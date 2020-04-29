@@ -63,6 +63,6 @@ class AdminUserIndexRequest extends FormRequest
      */
     public function pageUnit()
     {
-        return $this->input('page_unit');
+        return $this->filled('page_unit') ? $this->input('page_unit'):10;
     }
 }
