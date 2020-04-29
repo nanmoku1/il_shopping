@@ -15,6 +15,7 @@ class AdminUserIndexRequest extends FormRequest
     public function rules()
     {
         return [
+            "page_unit" => "integer",
         ];
     }
 

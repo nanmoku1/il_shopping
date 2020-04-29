@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin\AdminUsers;
 
 use App\Models\AdminUser;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AdminUserEditRequest extends FormRequest
 {
@@ -21,16 +22,10 @@ class AdminUserEditRequest extends FormRequest
                 "string",
                 "email",
                 "max:255",
-                function ($attribute, $value, $fail) {
-                    $find_admin_user = AdminUser::select(["id"])
-                        ->where("email", "=", $value)->where("id", "!=", $this->admin_user->id)->first();
-                    if ($find_admin_user) {
-                        return $fail("既に登録されているメールアドレスです。");
-                    }
-                },
+                Rule::unique(AdminUser::class)->ignore($this->admin_user),
             ],
         ];
-        if ($this->has("password") && strlen($this->password()) > 0) {
+        if ($this->filled("password") && strlen($this->password()) > 0) {
             $rules["password"] = "min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation";
         }
         return $rules;
@@ -47,6 +42,7 @@ class AdminUserEditRequest extends FormRequest
             "email.required" => "メールアドレスは必須です。",
             "email.email" => "メールアドレスの形式が不正です。",
             "email.max" => "メールアドレスは255文字以内です。",
+            "email.unique" => "既に登録されているメールアドレスです。",
             "password.min" => "パスワードが4文字以下です。",
             "password.regex" => "パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。",
             "password.same" => "パスワードが確認と一致していません。",

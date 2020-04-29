@@ -109,4 +109,12 @@ class AdminUser extends Authenticatable
 
         return $query->orderBy($order_by_key, $order_by_asc_desc);
     }
+
+    /**
+     * @param $value
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = \Hash::make($value);
+    }
 }

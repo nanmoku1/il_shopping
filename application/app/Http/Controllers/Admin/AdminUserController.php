@@ -73,13 +73,7 @@ class AdminUserController extends Controller
      */
     public function store(AdminUserCreateRequest $request)
     {
-        $create_admin_user = AdminUser::create([
-            "name" => $request->name(),
-            "email" => $request->email(),
-            "password" => \Hash::make($request->password()),
-            "is_owner" => $request->isOwner(),
-        ]);
-
+        $create_admin_user = AdminUser::create($request->validated());
         return redirect()->route("admin.admin_users.show", $create_admin_user->id);
     }
 
@@ -104,8 +98,8 @@ class AdminUserController extends Controller
             "email" => $request->email(),
         ];
 
-        if ($request->has("password")) {
-            $updateData["password"] = \Hash::make($request->password());
+        if ($request->filled("password")) {
+            $updateData["password"] = $request->password();
         }
 
         $admin_user->update($updateData);

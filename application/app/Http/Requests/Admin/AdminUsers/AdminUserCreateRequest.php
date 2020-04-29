@@ -16,19 +16,9 @@ class AdminUserCreateRequest extends FormRequest
     {
         return [
             "name" => "required|string|max:255",
-            "email" => [
-                "required",
-                "string",
-                "email",
-                "max:255",
-                function ($attribute, $value, $fail) {
-                    $admin_user = AdminUser::select(["id"])->where("email", "=", $value)->first();
-                    if ($admin_user) {
-                        return $fail("既に登録されているメールアドレスです。");
-                    }
-                },
-            ],
+            "email" => "required|string|email|max:255|unique:admin_users",
             "password" => "required|min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation",
+            "is_owner" => "required",
         ];
     }
 
@@ -40,6 +30,7 @@ class AdminUserCreateRequest extends FormRequest
             "email.required" => "メールアドレスは必須です。",
             "email.email" => "メールアドレスの形式が不正です。",
             "email.max" => "メールアドレスは255文字以内です。",
+            "email.unique" => "既に登録されているメールアドレスです。",
             "password.min" => "パスワードが4文字以下です。",
             "password.regex" => "パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。",
             "password.same" => "パスワードが確認と一致していません。",

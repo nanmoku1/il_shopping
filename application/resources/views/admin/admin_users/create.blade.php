@@ -8,31 +8,32 @@
             <div class="form-group">
                 <label for="name">名称</label>
                 <input type="text" class="form-control {{ $errors->has("name") ? "is-invalid":"" }}" id="name" name="name" value="{{ old("name") }}" placeholder="名称" autocomplete="name" autofocus="">
-                @foreach($errors->get("name") as $err)
+                @error("name")
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $err }}</strong>
+                    <strong>{{ $message }}</strong>
                 </span>
-                @endforeach
+                @enderror
             </div>
 
             <div class="form-group">
                 <label for="email">メールアドレス</label>
                 <input type="text" class="form-control {{ $errors->has("email") ? "is-invalid":"" }}" id="email" name="email" value="{{ old("email") }}" placeholder="メールアドレス" autocomplete="email">
-                @foreach($errors->get("email") as $err)
+                @error("email")
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $err }}</strong>
+                    <strong>{{ $message }}</strong>
                 </span>
-                @endforeach
+                @enderror
             </div>
 
             <div class="form-group">
                 <label for="password">パスワード</label>
                 <input type="password" class="form-control  {{ $errors->has("password") ? "is-invalid":"" }}" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
-                @foreach($errors->get("password") as $err)
+                @error("password")
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $err }}</strong>
+                    <strong>{{ $message }}</strong>
                 </span>
-                @endforeach
+                @enderror
+
             </div>
 
             <div class="form-group">
