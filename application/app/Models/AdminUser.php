@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser sort($sort_key = 'id', $sort_asc_desc = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser sort($sort_key, $sort_asc_desc)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereId($value)
@@ -84,7 +84,7 @@ class AdminUser extends Authenticatable
      * @param string $sort_asc_desc
      * @return Builder
      */
-    public function scopeSort(Builder $query, string $sort_key = "id", string $sort_asc_desc = "asc")
+    public function scopeSort(Builder $query, string $sort_key, string $sort_asc_desc)
     {
         $order_by_key = null;
         switch ($sort_key) {
@@ -115,6 +115,16 @@ class AdminUser extends Authenticatable
      */
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = \Hash::make($value);
+        if (filled($value)) {
+            $this->attributes['password'] = \Hash::make($value);
+        }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setIsOwnerAttribute($value)
+    {
+        $this->attributes['is_owner'] = !empty($value);
     }
 }

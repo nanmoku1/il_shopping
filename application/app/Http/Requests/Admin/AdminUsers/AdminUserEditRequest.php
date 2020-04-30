@@ -24,10 +24,9 @@ class AdminUserEditRequest extends FormRequest
                 "max:255",
                 Rule::unique(AdminUser::class)->ignore($this->admin_user),
             ],
+            "password" => "nullable|min:4|alpha_dash|confirmed",
+            "is_owner" => "required",
         ];
-        if ($this->filled("password") && strlen($this->password()) > 0) {
-            $rules["password"] = "min:4|regex:/^[0-9a-zA-Z\\-\\_]+$/|same:password_confirmation";
-        }
         return $rules;
     }
 
@@ -44,8 +43,7 @@ class AdminUserEditRequest extends FormRequest
             "email.max" => "メールアドレスは255文字以内です。",
             "email.unique" => "既に登録されているメールアドレスです。",
             "password.min" => "パスワードが4文字以下です。",
-            "password.regex" => "パスワードにアルファベット、数字、アンダーバー、ハイフン以外の文字があります。",
-            "password.same" => "パスワードが確認と一致していません。",
+            "password.confirmed" => "パスワードが確認と一致していません。",
         ];
     }
 
@@ -74,10 +72,10 @@ class AdminUserEditRequest extends FormRequest
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function isOwner()
     {
-        return $this->input('is_owner');
+        return !empty($this->input('is_owner'));
     }
 }

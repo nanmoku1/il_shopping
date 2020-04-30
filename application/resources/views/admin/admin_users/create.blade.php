@@ -7,7 +7,7 @@
             @csrf
             <div class="form-group">
                 <label for="name">名称</label>
-                <input type="text" class="form-control {{ $errors->has("name") ? "is-invalid":"" }}" id="name" name="name" value="{{ old("name") }}" placeholder="名称" autocomplete="name" autofocus="">
+                <input type="text" class="form-control @error("name") is-invalid @enderror" id="name" name="name" value="{{ old("name") }}" placeholder="名称" autocomplete="name" autofocus="">
                 @error("name")
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -17,7 +17,7 @@
 
             <div class="form-group">
                 <label for="email">メールアドレス</label>
-                <input type="text" class="form-control {{ $errors->has("email") ? "is-invalid":"" }}" id="email" name="email" value="{{ old("email") }}" placeholder="メールアドレス" autocomplete="email">
+                <input type="text" class="form-control @error("email") is-invalid @enderror" id="email" name="email" value="{{ old("email") }}" placeholder="メールアドレス" autocomplete="email">
                 @error("email")
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -27,7 +27,7 @@
 
             <div class="form-group">
                 <label for="password">パスワード</label>
-                <input type="password" class="form-control  {{ $errors->has("password") ? "is-invalid":"" }}" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
+                <input type="password" class="form-control @error("password") is-invalid @enderror" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
                 @error("password")
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>

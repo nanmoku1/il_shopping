@@ -30,22 +30,17 @@ class AdminUserController extends Controller
             "email",
             "is_owner",
         ]);
-        if (!empty($request->name())) {
-            $builder_admin_user->FuzzyName($request->name());
+        if (filled($request->name())) {
+            $builder_admin_user->fuzzyName($request->name());
         }
-        if (!empty($request->email())) {
-            $builder_admin_user->FuzzyEmail($request->email());
+        if (filled($request->email())) {
+            $builder_admin_user->fuzzyEmail($request->email());
         }
-        if (!is_null($request->authority())) {
+        if (filled($request->authority())) {
             $builder_admin_user->whereIsOwner($request->authority());
         }
-        if (!is_null($request->sortColumn()) && !is_null($request->sortDirection())) {
-            $builder_admin_user->sort($request->sortColumn(), $request->sortDirection());
-        } else {
-            $builder_admin_user->sort();
-        }
+        $builder_admin_user->sort($request->sortColumn(), $request->sortDirection());
         $admin_users = $builder_admin_user->paginate($request->pageUnit());
-
         return view('admin.admin_users.index', compact("admin_users", "request"));
     }
 
@@ -92,16 +87,7 @@ class AdminUserController extends Controller
      */
     public function update(AdminUserEditRequest $request, AdminUser $admin_user)
     {
-        $updateData = [
-            "name" => $request->name(),
-            "email" => $request->email(),
-        ];
-
-        if ($request->filled("password")) {
-            $updateData["password"] = $request->password();
-        }
-
-        $admin_user->update($updateData);
+        $admin_user->update($request->validated());
         return redirect()->route("admin.admin_users.show", $admin_user->id);
     }
 

@@ -15,6 +15,9 @@ class AdminUserIndexRequest extends FormRequest
     public function rules()
     {
         return [
+            "authority" => "nullable|boolean",
+            "sort_column" => "in:id,name,email",
+            "sort_direction" => "in:asc,desc",
             "page_unit" => "integer",
         ];
     }
@@ -36,11 +39,12 @@ class AdminUserIndexRequest extends FormRequest
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function authority()
     {
-        return $this->input('authority');
+        //null,空白→すべての権限
+        return filled($this->input('authority')) ? !empty($this->input('authority')):null;
     }
 
     /**
@@ -48,7 +52,7 @@ class AdminUserIndexRequest extends FormRequest
      */
     public function sortColumn()
     {
-        return $this->input('sort_column');
+        return $this->input('sort_column', 'id');
     }
 
     /**
@@ -56,7 +60,7 @@ class AdminUserIndexRequest extends FormRequest
      */
     public function sortDirection()
     {
-        return $this->input('sort_direction');
+        return $this->input('sort_direction', 'asc');
     }
 
     /**
@@ -64,6 +68,6 @@ class AdminUserIndexRequest extends FormRequest
      */
     public function pageUnit()
     {
-        return $this->filled('page_unit') ? $this->input('page_unit'):10;
+        return $this->input('page_unit', 10);
     }
 }
