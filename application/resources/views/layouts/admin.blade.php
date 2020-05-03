@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route("admin.product_categories.index") }}">
                             商品カテゴリ管理
                         </a>
                     </li>
