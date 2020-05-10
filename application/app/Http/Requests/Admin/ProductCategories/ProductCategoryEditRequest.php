@@ -25,8 +25,8 @@ class ProductCategoryEditRequest extends FormRequest
     public function messages()
     {
         return [
-            "name.required" => "ログイン名は必須です。",
-            "name.max" => "名前は255文字以内です。",
+            "name.required" => "カテゴリー名は必須です。",
+            "name.max" => "カテゴリー名は255文字以内です。",
             "order_no.required" => "並び順番号は必須です。",
         ];
     }
