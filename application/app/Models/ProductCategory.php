@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $order_no
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $product
+ * @property-read int|null $product_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newQuery()
@@ -31,6 +33,11 @@ class ProductCategory extends Model
         'name',
         'order_no',
     ];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class, "product_category_id", "id");
+    }
 
     public function scopeFuzzyName(Builder $query, string $name)
     {

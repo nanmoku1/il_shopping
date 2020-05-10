@@ -12,6 +12,14 @@ use App\Models\ProductCategory;
 class ProductCategoryController extends Controller
 {
     /**
+     * AdminUserController constructor.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(ProductCategory::class, "product_category");
+    }
+
+    /**
      * @param ProductCategoryIndexRequest $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

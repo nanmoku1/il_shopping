@@ -8,6 +8,7 @@
     <li class="list-inline-item">
         <a href="{{ route("admin.product_categories.edit", $product_category->id) }}" class="btn btn-success">編集</a>
     </li>
+    @can('delete', $product_category)
     <li class="list-inline-item">
         <form action="{{ route("admin.product_categories.destroy", $product_category->id) }}" method="POST">
             @method('DELETE')
@@ -15,6 +16,7 @@
             <button type="submit" class="btn btn-danger">削除</button>
         </form>
     </li>
+    @endcan
 </ul>
 
 <table class="table">
