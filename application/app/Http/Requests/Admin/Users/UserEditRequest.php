@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Admin\Users;
 
-use App\Models\AdminUser;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +22,7 @@ class UserEditRequest extends FormRequest
                 "string",
                 "email",
                 "max:255",
-                Rule::unique(AdminUser::class)->ignore($this->user),
+                Rule::unique(User::class)->ignore($this->user),
             ],
             "password" => "nullable|min:4|alpha_dash|confirmed",
             "image_path" => "nullable|image",
