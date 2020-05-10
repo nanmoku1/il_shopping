@@ -83,9 +83,9 @@ class ProductCategoryController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy(AdminUser $admin_user)
+    public function destroy(ProductCategory $product_category)
     {
-        $admin_user->delete();
+        $product_category->delete();
         return redirect()->route("admin.product_categories.index");
     }
 }
