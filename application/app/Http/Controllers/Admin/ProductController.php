@@ -116,6 +116,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $product->productReview()->delete();
+        $product->wishProduct()->detach();
+
         $old_image_path = $product->image_path;
         if ($product->delete() && filled($old_image_path) && \Storage::exists($old_image_path)) {
             \Storage::delete($old_image_path);

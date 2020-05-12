@@ -95,6 +95,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $user->productReview()->delete();
+        $user->wishProduct()->detach();
+
         $old_image_path = $user->image_path;
         if ($user->delete() && filled($old_image_path) && \Storage::exists($old_image_path)) {
             \Storage::delete($old_image_path);

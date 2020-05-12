@@ -18,6 +18,10 @@ use Illuminate\Http\UploadedFile;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\ProductCategory $productCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductReview[] $productReview
+ * @property-read int|null $product_review_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishProduct
+ * @property-read int|null $wish_product_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product leftJoinProductCategory()
@@ -53,6 +57,16 @@ class Product extends Model
     public function productCategory()
     {
         return $this->hasOne(ProductCategory::class, "id", "product_category_id");
+    }
+
+    public function productReview()
+    {
+        return $this->hasMany(ProductReview::class, "product_id", "id");
+    }
+
+    public function wishProduct()
+    {
+        return $this->belongsToMany(User::class, "wish_products","product_id", "user_id");
     }
 
     public function scopeLeftJoinProductCategory(Builder $query)
