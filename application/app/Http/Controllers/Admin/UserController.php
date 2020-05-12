@@ -16,7 +16,6 @@ class UserController extends Controller
      */
     public function index(UserIndexRequest $request)
     {
-        logger(\App\DebugFunc::dumpStr(\Storage::disk()->exists('user_images/kS4Lb4tBgkiH60pXh8enxVZ834cEBwYvstpNWgP0.png')));
         $builder_user = User::select([
             "id",
             "name",
