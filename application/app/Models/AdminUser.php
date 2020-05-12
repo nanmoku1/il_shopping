@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser sort($sort_key, $sort_asc_desc)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser sort($column, $direction)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereId($value)
@@ -80,34 +80,34 @@ class AdminUser extends Authenticatable
 
     /**
      * @param Builder $query
-     * @param string $sort_key
-     * @param string $sort_asc_desc
+     * @param string $column
+     * @param string $direction
      * @return Builder
      */
-    public function scopeSort(Builder $query, string $sort_key, string $sort_asc_desc)
+    public function scopeSort(Builder $query, string $column, string $direction)
     {
-        $order_by_key = null;
-        switch ($sort_key) {
+        $order_by_column = null;
+        switch ($column) {
             case "name":
-                $order_by_key = "name";
+                $order_by_column = "name";
                 break;
             case "email":
-                $order_by_key = "email";
+                $order_by_column = "email";
                 break;
             default:
-                $order_by_key = "id";
+                $order_by_column = "id";
         }
 
-        $order_by_asc_desc = null;
-        switch ($sort_asc_desc) {
+        $order_by_direction = null;
+        switch ($direction) {
             case "desc":
-                $order_by_asc_desc = "DESC";
+                $order_by_direction = "DESC";
                 break;
             default:
-                $order_by_asc_desc = "ASC";
+                $order_by_direction = "ASC";
         }
 
-        return $query->orderBy($order_by_key, $order_by_asc_desc);
+        return $query->orderBy($order_by_column, $order_by_direction);
     }
 
     /**
@@ -118,13 +118,5 @@ class AdminUser extends Authenticatable
         if (filled($value)) {
             $this->attributes['password'] = \Hash::make($value);
         }
-    }
-
-    /**
-     * @param $value
-     */
-    public function setIsOwnerAttribute($value)
-    {
-        $this->attributes['is_owner'] = !empty($value);
     }
 }

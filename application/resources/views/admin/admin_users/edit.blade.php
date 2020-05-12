@@ -46,13 +46,13 @@
                 <label class="form-check-label" for="general">一般</label>
             </div>
             <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="owner" name="is_owner" value="1" {{ old("is_owner", $admin_user->is_owner) == 1 ? "checked":""  }}>
+                <input type="radio" class="form-check-input" id="owner" name="is_owner" value="1" {{ old("is_owner", $admin_user->is_owner) == 1 ? "checked" : ""  }}>
                 <label class="form-check-label" for="owner">オーナー</label>
             </div>
 
             <div class="form-group">
                 <label>権限</label>
-                <div>{{ $admin_user->is_owner ? "オーナー":"一般" }}</div>
+                <div>{{ $admin_user->is_owner ? "オーナー" : "一般" }}</div>
             </div>
 
             <hr class="mb-3">

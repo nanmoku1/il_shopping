@@ -15,7 +15,7 @@ class AdminUserIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            "authority" => "nullable|boolean",
+            "authority" => "nullable|in:owner,general,all",
             "sort_column" => "in:id,name,email",
             "sort_direction" => "in:asc,desc",
             "page_unit" => "integer",
@@ -43,6 +43,17 @@ class AdminUserIndexRequest extends FormRequest
      */
     public function authority()
     {
+        switch ($this->input('authority')) {
+            case "owner":
+                return true;
+                break;
+            case "general":
+                return false;
+                break;
+            case "all":
+            default:
+                return null;
+        }
         //null,空白→すべての権限
         return filled($this->input('authority')) ? !empty($this->input('authority')):null;
     }

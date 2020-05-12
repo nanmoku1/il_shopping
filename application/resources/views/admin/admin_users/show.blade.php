@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <th>権限</th>
-            <td>{{ $admin_user->is_owner ? "オーナー":"一般" }}</td>
+            <td>{{ $admin_user->is_owner ? "オーナー" : "一般" }}</td>
         </tr>
     </tbody>
 </table>
