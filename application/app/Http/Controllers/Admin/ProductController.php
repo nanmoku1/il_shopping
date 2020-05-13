@@ -40,7 +40,7 @@ class ProductController extends Controller
         }
         $builder_product->sort($request->sortColumn(), $request->sortDirection());
         $products = $builder_product->paginate($request->pageUnit());
-        return view('admin.products.index', compact("products", "product_categories", "request"));
+        return view('admin.products.index', compact("products","product_categories"));
     }
 
     /**

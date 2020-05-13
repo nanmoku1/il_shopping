@@ -38,44 +38,4 @@ class ProductCreateRequest extends FormRequest
             "image_path.image" => "イメージは画像ファイルをアップロードしてください。",
         ];
     }
-
-    /**
-     * @return mixed
-     */
-    public function productCategoryId()
-    {
-        return $this->input('product_category_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function price()
-    {
-        return $this->input('price');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function name()
-    {
-        return $this->input('name');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function description()
-    {
-        return $this->input('description');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function imagePath()
-    {
-        return $this->input('image_path');
-    }
 }

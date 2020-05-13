@@ -27,7 +27,7 @@ $(function(){
                     <option value="" selected=""></option>
                     {{ old("name") }}
                     @foreach($product_categories as $product_category)
-                    <option value="{{ $product_category->id }}" {{ old("product_category_id") == $product_category->id ? "selected":"" }}>{{ $product_category->name }}</option>
+                    <option value="{{ $product_category->id }}" {{ old("product_category_id") == $product_category->id ? "selected" : "" }}>{{ $product_category->name }}</option>
                     @endforeach
                 </select>
                 @error("product_category_id")

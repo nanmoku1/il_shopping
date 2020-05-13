@@ -82,32 +82,32 @@ class Product extends Model
      * @param string $sort_asc_desc
      * @return Builder
      */
-    public function scopeSort(Builder $query, string $sort_key, string $sort_asc_desc)
+    public function scopeSort(Builder $query, string $column, string $direction)
     {
-        $order_by_asc_desc = null;
-        switch ($sort_asc_desc) {
+        $order_by_column = null;
+        switch ($direction) {
             case "desc":
-                $order_by_asc_desc = "DESC";
+                $order_by_column = "DESC";
                 break;
             default:
-                $order_by_asc_desc = "ASC";
+                $order_by_column = "ASC";
         }
 
-        $order_by_key = null;
-        switch ($sort_key) {
+        $order_by_direction = null;
+        switch ($column) {
             case "product_category":
-                return $query->orderBy("product_categories.order_no", $order_by_asc_desc)->orderBy("products.id", "ASC");
+                return $query->orderBy("product_categories.order_no", $order_by_column)->orderBy("products.id", "ASC");
                 break;
             case "name":
-                $order_by_key = "products.name";
+                $order_by_direction = "products.name";
                 break;
             case "price":
-                $order_by_key = "products.price";
+                $order_by_direction = "products.price";
                 break;
             default:
-                $order_by_key = "products.id";
+                $order_by_direction = "products.id";
         }
-        return $query->orderBy($order_by_key, $order_by_asc_desc);
+        return $query->orderBy($order_by_direction, $order_by_column);
     }
 
     /**

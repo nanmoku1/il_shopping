@@ -26,7 +26,7 @@
                 <select class="custom-select @error("product_category_id") is-invalid @enderror" id="product_category_id" name="product_category_id">
                     <option value="" selected=""></option>
                     @foreach($product_categories as $product_category)
-                        <option value="{{ $product_category->id }}" {{ old("product_category_id", $product->product_category_id) == $product_category->id ? "selected":"" }}>{{ $product_category->name }}</option>
+                        <option value="{{ $product_category->id }}" {{ old("product_category_id", $product->product_category_id) == $product_category->id ? "selected" : "" }}>{{ $product_category->name }}</option>
                     @endforeach
                 </select>
                 @error("product_category_id")
