@@ -41,7 +41,7 @@ class AdminUserController extends Controller
         }
         $admin_user->sort($request->sortColumn(), $request->sortDirection());
         $admin_users = $admin_user->paginate($request->pageUnit());
-        return view('admin.admin_users.index', compact("admin_users", "request"));
+        return view('admin.admin_users.index', compact("admin_users"));
     }
 
     /**
