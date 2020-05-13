@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory sort($sort_key, $sort_asc_desc)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory sort($column, $direction)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory whereName($value)
@@ -44,29 +44,29 @@ class ProductCategory extends Model
         $query->where("name", "like", "%{$name}%");
     }
 
-    public function scopeSort(Builder $query, string $sort_key, string $sort_asc_desc)
+    public function scopeSort(Builder $query, string $column, string $direction)
     {
-        $order_by_key = null;
-        switch ($sort_key) {
+        $order_by_column = null;
+        switch ($column) {
             case "name":
-                $order_by_key = "name";
+                $order_by_column = "name";
                 break;
             case "order_no":
-                $order_by_key = "order_no";
+                $order_by_column = "order_no";
                 break;
             default:
-                $order_by_key = "id";
+                $order_by_column = "id";
         }
 
-        $order_by_asc_desc = null;
-        switch ($sort_asc_desc) {
+        $order_by_direction = null;
+        switch ($direction) {
             case "desc":
-                $order_by_asc_desc = "DESC";
+                $order_by_direction = "DESC";
                 break;
             default:
-                $order_by_asc_desc = "ASC";
+                $order_by_direction = "ASC";
         }
 
-        return $query->orderBy($order_by_key, $order_by_asc_desc);
+        return $query->orderBy($order_by_column, $order_by_direction);
     }
 }

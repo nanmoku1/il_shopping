@@ -30,20 +30,4 @@ class ProductCategoryEditRequest extends FormRequest
             "order_no.required" => "並び順番号は必須です。",
         ];
     }
-
-    /**
-     * @return mixed
-     */
-    public function name()
-    {
-        return $this->input('name');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function orderNo()
-    {
-        return $this->input('order_no');
-    }
 }
