@@ -24,24 +24,24 @@ class AdminUserController extends Controller
      */
     public function index(AdminUserIndexRequest $request)
     {
-        $builder_admin_user = AdminUser::select([
+        $admin_user = AdminUser::select([
             "id",
             "name",
             "email",
             "is_owner",
         ]);
         if (filled($request->name())) {
-            $builder_admin_user->fuzzyName($request->name());
+            $admin_user->fuzzyName($request->name());
         }
         if (filled($request->email())) {
-            $builder_admin_user->fuzzyEmail($request->email());
+            $admin_user->fuzzyEmail($request->email());
         }
         if (filled($request->authority())) {
-            $builder_admin_user->whereIsOwner($request->authority());
+            $admin_user->whereIsOwner($request->authority());
         }
-        $builder_admin_user->sort($request->sortColumn(), $request->sortDirection());
-        $admin_users = $builder_admin_user->paginate($request->pageUnit());
-        return view('admin.admin_users.index', compact("admin_users", "request"));
+        $admin_user->sort($request->sortColumn(), $request->sortDirection());
+        $admin_users = $admin_user->paginate($request->pageUnit());
+        return view('admin.admin_users.index', compact("admin_users"));
     }
 
     /**
@@ -67,8 +67,8 @@ class AdminUserController extends Controller
      */
     public function store(AdminUserCreateRequest $request)
     {
-        $create_admin_user = AdminUser::create($request->validated());
-        return redirect()->route("admin.admin_users.show", $create_admin_user->id);
+        $admin_user = AdminUser::create($request->validated());
+        return redirect()->route("admin.admin_users.show", $admin_user->id);
     }
 
     /**
