@@ -17,18 +17,18 @@ class ProductCategoryController extends Controller
      */
     public function index(ProductCategoryIndexRequest $request)
     {
-        $builder_product_category = ProductCategory::select([
+        $product_category = ProductCategory::select([
             "id",
             "name",
             "order_no",
         ]);
         if (filled($request->name())) {
-            $builder_product_category->fuzzyName($request->name());
+            $product_category->fuzzyName($request->name());
         }
 
-        $builder_product_category->sort($request->sortColumn(), $request->sortDirection());
-        $product_categories = $builder_product_category->paginate($request->pageUnit());
-        return view('admin.product_categories.index', compact("product_categories", "request"));
+        $product_category->sort($request->sortColumn(), $request->sortDirection());
+        $product_categories = $product_category->paginate($request->pageUnit());
+        return view('admin.product_categories.index', compact("product_categories"));
     }
 
     /**
@@ -54,8 +54,8 @@ class ProductCategoryController extends Controller
      */
     public function store(ProductCategoryCreateRequest $request)
     {
-        $create_product_category = ProductCategory::create($request->validated());
-        return redirect()->route("admin.product_categories.show", $create_product_category->id);
+        $product_category = ProductCategory::create($request->validated());
+        return redirect()->route("admin.product_categories.show", $product_category->id);
     }
 
     /**
