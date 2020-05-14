@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductCreateRequest extends FormRequest
+class ProductUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,13 +13,15 @@ class ProductCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             "product_category_id" => "required|exists:product_categories,id",
             "price" => "required|integer|min:0",
             "name" => "required|string|max:255",
             "description" => "nullable",
             "image_path" => "nullable|image",
+            "image_del" => "nullable|boolean",
         ];
+        return $rules;
     }
 
     /**
@@ -37,5 +39,13 @@ class ProductCreateRequest extends FormRequest
             "name.max" => "名前は255文字以内です。",
             "image_path.image" => "イメージは画像ファイルをアップロードしてください。",
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function imageDel()
+    {
+        return !empty($this->input('image_del'));
     }
 }

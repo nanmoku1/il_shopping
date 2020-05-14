@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Products\ProductIndexRequest;
-use App\Http\Requests\Admin\Products\ProductCreateRequest;
-use App\Http\Requests\Admin\Products\ProductEditRequest;
+use App\Http\Requests\Admin\Products\ProductStoreRequest;
+use App\Http\Requests\Admin\Products\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 
@@ -66,10 +66,10 @@ class ProductController extends Controller
     }
 
     /**
-     * @param ProductCreateRequest $request
+     * @param ProductStoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ProductCreateRequest $request)
+    public function store(ProductStoreRequest $request)
     {
 
         $create_product = Product::create($request->validated());
@@ -91,11 +91,11 @@ class ProductController extends Controller
     }
 
     /**
-     * @param ProductEditRequest $request
+     * @param ProductUpdateRequest $request
      * @param Product $product
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProductEditRequest $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
         $old_image_path = $product->image_path;
         $update_data = $request->validated();
