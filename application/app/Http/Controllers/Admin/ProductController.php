@@ -22,7 +22,7 @@ class ProductController extends Controller
                 "id",
                 "name",
             ])->get();
-        $builder_product = Product::leftJoinProductCategory()
+        $product = Product::leftJoinProductCategory()
             ->select([
                 "products.id",
                 "products.name",
@@ -30,16 +30,16 @@ class ProductController extends Controller
                 "products.price",
             ]);
         if (filled($request->name())) {
-            $builder_product->fuzzyName($request->name());
+            $product->fuzzyName($request->name());
         }
         if (filled($request->price())) {
-            $builder_product->comparePrice($request->price(), $request->priceCompare());
+            $product->comparePrice($request->price(), $request->priceCompare());
         }
         if (filled($request->productCategoryId())) {
-            $builder_product->whereProductCategoryId($request->productCategoryId());
+            $product->whereProductCategoryId($request->productCategoryId());
         }
-        $builder_product->sort($request->sortColumn(), $request->sortDirection());
-        $products = $builder_product->paginate($request->pageUnit());
+        $product->sort($request->sortColumn(), $request->sortDirection());
+        $products = $product->paginate($request->pageUnit());
         return view('admin.products.index', compact("products","product_categories"));
     }
 
@@ -71,9 +71,8 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-
-        $create_product = Product::create($request->validated());
-        return redirect()->route("admin.products.show", $create_product->id);
+        $product = Product::create($request->validated());
+        return redirect()->route("admin.products.show", $product->id);
     }
 
     /**
