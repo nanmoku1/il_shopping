@@ -6,7 +6,7 @@ use App\Models\AdminUser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AdminUserEditRequest extends FormRequest
+class AdminUserUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

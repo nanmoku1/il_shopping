@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin\AdminUsers;
 use App\Models\AdminUser;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminUserCreateRequest extends FormRequest
+class AdminUserStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

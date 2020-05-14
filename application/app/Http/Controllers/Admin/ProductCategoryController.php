@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ProductCategories\ProductCategoryCreateRequest;
-use App\Http\Requests\Admin\ProductCategories\ProductCategoryEditRequest;
+use App\Http\Requests\Admin\ProductCategories\ProductCategoryStoreRequest;
+use App\Http\Requests\Admin\ProductCategories\ProductCategoryUpdateRequest;
 use App\Http\Requests\Admin\ProductCategories\ProductCategoryIndexRequest;
 use App\Models\AdminUser;
 use App\Models\ProductCategory;
@@ -49,10 +49,10 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * @param ProductCategoryCreateRequest $request
+     * @param ProductCategoryStoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ProductCategoryCreateRequest $request)
+    public function store(ProductCategoryStoreRequest $request)
     {
         $product_category = ProductCategory::create($request->validated());
         return redirect()->route("admin.product_categories.show", $product_category->id);
@@ -68,11 +68,11 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * @param ProductCategoryEditRequest $request
+     * @param ProductCategoryUpdateRequest $request
      * @param ProductCategory $product_category
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProductCategoryEditRequest $request, ProductCategory $product_category)
+    public function update(ProductCategoryUpdateRequest $request, ProductCategory $product_category)
     {
         $product_category->update($request->validated());
         return redirect()->route("admin.product_categories.show", $product_category->id);

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminUsers\AdminUserIndexRequest;
-use App\Http\Requests\Admin\AdminUsers\AdminUserCreateRequest;
-use App\Http\Requests\Admin\AdminUsers\AdminUserEditRequest;
+use App\Http\Requests\Admin\AdminUsers\AdminUserStoreRequest;
+use App\Http\Requests\Admin\AdminUsers\AdminUserUpdateRequest;
 use App\Models\AdminUser;
 
 class AdminUserController extends Controller
@@ -62,10 +62,10 @@ class AdminUserController extends Controller
     }
 
     /**
-     * @param AdminUserCreateRequest $request
+     * @param AdminUserStoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(AdminUserCreateRequest $request)
+    public function store(AdminUserStoreRequest $request)
     {
         $admin_user = AdminUser::create($request->validated());
         return redirect()->route("admin.admin_users.show", $admin_user->id);
@@ -81,11 +81,11 @@ class AdminUserController extends Controller
     }
 
     /**
-     * @param AdminUserEditRequest $request
+     * @param AdminUserUpdateRequest $request
      * @param AdminUser $admin_user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(AdminUserEditRequest $request, AdminUser $admin_user)
+    public function update(AdminUserUpdateRequest $request, AdminUser $admin_user)
     {
         $admin_user->update($request->validated());
         return redirect()->route("admin.admin_users.show", $admin_user->id);

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\ProductCategories;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductCategoryCreateRequest extends FormRequest
+class ProductCategoryStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
