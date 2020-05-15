@@ -20,7 +20,6 @@ use Illuminate\Http\UploadedFile;
  * @property-read \App\Models\ProductCategory $productCategory
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product leftJoinProductCategory()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product query()
@@ -53,11 +52,6 @@ class Product extends Model
     public function productCategory()
     {
         return $this->hasOne(ProductCategory::class, "id", "product_category_id");
-    }
-
-    public function scopeLeftJoinProductCategory(Builder $query)
-    {
-        $query->leftJoin("product_categories", "product_categories.id", "=", "products.product_category_id");
     }
 
     public function scopeFuzzyName(Builder $query, string $name)
@@ -96,7 +90,9 @@ class Product extends Model
         $order_by_direction = null;
         switch ($column) {
             case "product_category":
-                return $query->orderBy("product_categories.order_no", $order_by_column)->orderBy("products.id", "ASC");
+                return $query->leftJoin("product_categories", "product_categories.id", "=", "products.product_category_id")
+                    ->orderBy("product_categories.order_no", $order_by_column)
+                    ->orderBy("products.id", "ASC");
                 break;
             case "name":
                 $order_by_direction = "products.name";

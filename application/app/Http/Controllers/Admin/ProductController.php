@@ -17,14 +17,14 @@ class ProductController extends Controller
      */
     public function index(ProductIndexRequest $request)
     {
-        $product_categories = ProductCategory::allProductCategories()->get();
-        $product = Product::leftJoinProductCategory()
-            ->select([
+        $product_categories = $this->_get_product_categories();
+        $product = Product::select([
                 "products.id",
                 "products.name",
-                "product_categories.name AS product_category_name",
+                "products.product_category_id",
                 "products.price",
-            ]);
+            ])
+            ->with("productCategory");
         if (filled($request->name())) {
             $product->fuzzyName($request->name());
         }
@@ -53,7 +53,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $product_categories = ProductCategory::allProductCategories()->get();
+        $product_categories = $this->_get_product_categories();
         return view('admin.products.create', compact("product_categories"));
     }
 
@@ -73,7 +73,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $product_categories = ProductCategory::allProductCategories()->get();
+        $product_categories = $this->_get_product_categories();
         return view('admin.products.edit', compact("product", "product_categories"));
     }
 
@@ -108,5 +108,13 @@ class ProductController extends Controller
             \Storage::delete($old_image_path);
         }
         return redirect()->route("admin.products.index");
+    }
+
+    /**
+     * @return ProductCategory[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     */
+    private function _get_product_categories()
+    {
+        return ProductCategory::sort("order_no", "asc")->select(["id", "name", "order_no"])->get();
     }
 }
