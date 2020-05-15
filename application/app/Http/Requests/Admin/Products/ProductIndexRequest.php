@@ -15,7 +15,7 @@ class ProductIndexRequest extends FormRequest
     {
         return [
             "price" => "nullable|integer",
-            "price_compare" => "string",
+            "price_compare" => "nullable|string|in:gteq,lteq",
             "sort_column" => "in:id,product_category,name,price",
             "sort_direction" => "in:asc,desc",
             "page_unit" => "integer",

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
  * @property-read int|null $products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory allProductCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newQuery()
@@ -68,5 +69,10 @@ class ProductCategory extends Model
         }
 
         return $query->orderBy($order_by_column, $order_by_direction);
+    }
+
+    public function scopeAllProductCategories(Builder $query)
+    {
+        return $query->sort("order_no", "asc")->select(["id", "name", "order_no"]);
     }
 }

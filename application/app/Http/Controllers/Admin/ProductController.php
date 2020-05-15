@@ -17,11 +17,7 @@ class ProductController extends Controller
      */
     public function index(ProductIndexRequest $request)
     {
-        $product_categories = ProductCategory::sort("id", "asc")
-            ->select([
-                "id",
-                "name",
-            ])->get();
+        $product_categories = ProductCategory::allProductCategories()->get();
         $product = Product::leftJoinProductCategory()
             ->select([
                 "products.id",
@@ -57,11 +53,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $product_categories = ProductCategory::sort("id", "asc")
-            ->select([
-                "id",
-                "name",
-            ])->get();
+        $product_categories = ProductCategory::allProductCategories()->get();
         return view('admin.products.create', compact("product_categories"));
     }
 
@@ -81,11 +73,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $product_categories = ProductCategory::sort("id", "asc")
-            ->select([
-                "id",
-                "name",
-            ])->get();
+        $product_categories = ProductCategory::allProductCategories()->get();
         return view('admin.products.edit', compact("product", "product_categories"));
     }
 
