@@ -67,11 +67,11 @@
                     </li>
 
                     @can('viewAny', \App\Models\AdminUser::class)
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route("admin.admin_users.index") }}">
-                            管理者管理
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route("admin.admin_users.index") }}">
+                                管理者管理
+                            </a>
+                        </li>
                     @endcan
 
                 </ul>
