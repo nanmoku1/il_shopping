@@ -24,7 +24,7 @@ use Illuminate\Http\UploadedFile;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sort($sort_key, $sort_asc_desc)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sort($column, $direction)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product whereId($value)
