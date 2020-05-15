@@ -34,7 +34,7 @@ class ProductCategory extends Model
         'order_no',
     ];
 
-    public function product()
+    public function products()
     {
         return $this->hasMany(Product::class, "product_category_id", "id");
     }
