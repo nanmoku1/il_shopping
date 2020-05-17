@@ -35,16 +35,29 @@ class ProductCategory extends Model
         'order_no',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function products()
     {
         return $this->hasMany(Product::class, "product_category_id", "id");
     }
 
+    /**
+     * @param Builder $query
+     * @param string $name
+     */
     public function scopeFuzzyName(Builder $query, string $name)
     {
         $query->where("name", "like", "%{$name}%");
     }
 
+    /**
+     * @param Builder $query
+     * @param string $column
+     * @param string $direction
+     * @return Builder
+     */
     public function scopeSort(Builder $query, string $column, string $direction)
     {
         $order_by_column = null;
@@ -71,6 +84,10 @@ class ProductCategory extends Model
         return $query->orderBy($order_by_column, $order_by_direction);
     }
 
+    /**
+     * @param Builder $query
+     * @return mixed
+     */
     public function scopeAllProductCategories(Builder $query)
     {
         return $query->sort("order_no", "asc")->select(["id", "name", "order_no"]);

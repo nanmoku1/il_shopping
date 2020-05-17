@@ -49,16 +49,28 @@ class Product extends Model
         'image_path',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function productCategory()
     {
         return $this->hasOne(ProductCategory::class, "id", "product_category_id");
     }
 
+    /**
+     * @param Builder $query
+     * @param string $name
+     */
     public function scopeFuzzyName(Builder $query, string $name)
     {
         $query->where("products.name", "like", "%{$name}%");
     }
 
+    /**
+     * @param Builder $query
+     * @param int $price
+     * @param string $compare
+     */
     public function scopeComparePrice(Builder $query, int $price, string $compare)
     {
         switch ($compare) {
