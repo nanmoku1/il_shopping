@@ -84,15 +84,11 @@ class ProductController extends Controller
      */
     public function update(ProductUpdateRequest $request, Product $product)
     {
-        $old_image_path = $product->image_path;
         $update_data = $request->validated();
         if ($request->imageDel()) {
             $update_data["image_path"] = null;
         }
-        if ($product->update($update_data) && $old_image_path !== $product->image_path
-            && filled($old_image_path) && \Storage::exists($old_image_path)) {
-            \Storage::delete($old_image_path);
-        }
+        $product->update($update_data);
         return redirect()->route("admin.products.show", $product->id);
     }
 
@@ -103,10 +99,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $old_image_path = $product->image_path;
-        if ($product->delete() && filled($old_image_path) && \Storage::exists($old_image_path)) {
-            \Storage::delete($old_image_path);
-        }
+        \Storage::delete($product->image_path);
+        $product->delete();
         return redirect()->route("admin.products.index");
     }
 

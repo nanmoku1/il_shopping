@@ -113,9 +113,9 @@ class Product extends Model
     {
         if (is_null($value)) {
             $this->attributes['image_path'] = null;
-            return;
+        } else {
+            $this->attributes['image_path'] = $value->store("product_images");
         }
-
-        $this->attributes['image_path'] = $value->store("product_images");
+        \Storage::delete($this->getOriginal("image_path"));
     }
 }
