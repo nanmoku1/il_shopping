@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserCreateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -24,10 +24,10 @@ class UserCreateRequest extends FormRequest
                 "max:255",
                 Rule::unique(User::class)->ignore($this->user),
             ],
-            "password" => "required|min:4|alpha_dash|confirmed",
+            "password" => "nullable|min:4|alpha_dash|confirmed",
             "image_path" => "nullable|image",
+            "image_delete" => "nullable|boolean",
         ];
-
         return $rules;
     }
 
@@ -50,34 +50,10 @@ class UserCreateRequest extends FormRequest
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function name()
+    public function imageDelete()
     {
-        return $this->input('name');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function email()
-    {
-        return $this->input('email');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function password()
-    {
-        return $this->input('password');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function imagePath()
-    {
-        return $this->input('image_path');
+        return !empty($this->input('image_delete'));
     }
 }

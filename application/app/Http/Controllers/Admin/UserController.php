@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Users\UserCreateRequest;
-use App\Http\Requests\Admin\Users\UserEditRequest;
+use App\Http\Requests\Admin\Users\UserStoreRequest;
+use App\Http\Requests\Admin\Users\UserUpdateRequest;
 use App\Http\Requests\Admin\Users\UserIndexRequest;
 use App\Models\User;
 
@@ -54,7 +54,7 @@ class UserController extends Controller
      * @param UserCreateRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(UserCreateRequest $request)
+    public function store(UserStoreRequest $request)
     {
         $create_user = User::create($request->validated());
         return redirect()->route("admin.users.show", $create_user->id);
@@ -74,17 +74,13 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UserEditRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
-        $old_image_path = $user->image_path;
         $update_data = $request->validated();
-        if ($request->imageDel()) {
+        if ($request->imageDelete()) {
             $update_data["image_path"] = null;
         }
-        if ($user->update($update_data) && $old_image_path !== $user->image_path
-            && filled($old_image_path) && \Storage::exists($old_image_path)) {
-            \Storage::delete($old_image_path);
-        }
+        $user->update($update_data);
         return redirect()->route("admin.users.show", $user->id);
     }
 
@@ -95,13 +91,11 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->productReview()->delete();
-        $user->wishProduct()->detach();
+        $user->productReviews()->delete();
+        $user->wishProducts()->detach();
 
-        $old_image_path = $user->image_path;
-        if ($user->delete() && filled($old_image_path) && \Storage::exists($old_image_path)) {
-            \Storage::delete($old_image_path);
-        }
+        \Storage::delete($user->image_path);
+        $user->delete();
         return redirect()->route("admin.users.index");
     }
 }

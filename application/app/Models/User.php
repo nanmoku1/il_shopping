@@ -21,10 +21,10 @@ use Illuminate\Http\UploadedFile;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductReview[] $productReview
- * @property-read int|null $product_review_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishProduct
- * @property-read int|null $wish_product_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductReview[] $productReviews
+ * @property-read int|null $product_reviews_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishProducts
+ * @property-read int|null $wish_products_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzyEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
@@ -77,12 +77,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function productReview()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function productReviews()
     {
         return $this->hasMany(ProductReview::class, "user_id", "id");
     }
 
-    public function wishProduct()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function wishProducts()
     {
         return $this->belongsToMany(Product::class, "wish_products","user_id", "product_id");
     }
@@ -153,9 +159,9 @@ class User extends Authenticatable
     {
         if (is_null($value)) {
             $this->attributes['image_path'] = null;
-            return;
+        } else {
+            $this->attributes['image_path'] = $value->store("user_images");
         }
-
-        $this->attributes['image_path'] = $value->store("user_images");
+        \Storage::delete($this->getOriginal("image_path"));
     }
 }

@@ -99,8 +99,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->productReview()->delete();
-        $product->wishProduct()->detach();
+        $product->productReviews()->delete();
+        $product->wishProducts()->detach();
 
         \Storage::delete($product->image_path);
         $product->delete();

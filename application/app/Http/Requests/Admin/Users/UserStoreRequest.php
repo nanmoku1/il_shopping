@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserEditRequest extends FormRequest
+class UserStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -24,10 +24,10 @@ class UserEditRequest extends FormRequest
                 "max:255",
                 Rule::unique(User::class)->ignore($this->user),
             ],
-            "password" => "nullable|min:4|alpha_dash|confirmed",
+            "password" => "required|min:4|alpha_dash|confirmed",
             "image_path" => "nullable|image",
-            "image_del" => "nullable|boolean",
         ];
+
         return $rules;
     }
 
@@ -47,45 +47,5 @@ class UserEditRequest extends FormRequest
             "password.confirmed" => "パスワードが確認と一致していません。",
             "image_path.image" => "イメージは画像ファイルをアップロードしてください。。",
         ];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function name()
-    {
-        return $this->input('name');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function email()
-    {
-        return $this->input('email');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function password()
-    {
-        return $this->input('password');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function imagePath()
-    {
-        return $this->input('image_path');
-    }
-
-    /**
-     * @return bool
-     */
-    public function imageDel()
-    {
-        return !empty($this->input('image_del'));
     }
 }
