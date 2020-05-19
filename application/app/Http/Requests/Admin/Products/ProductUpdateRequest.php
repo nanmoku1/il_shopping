@@ -19,7 +19,7 @@ class ProductUpdateRequest extends FormRequest
             "name" => "required|string|max:255",
             "description" => "nullable",
             "image_path" => "nullable|image",
-            "image_del" => "nullable|boolean",
+            "image_delete" => "nullable|boolean",
         ];
         return $rules;
     }
@@ -44,8 +44,8 @@ class ProductUpdateRequest extends FormRequest
     /**
      * @return bool
      */
-    public function imageDel()
+    public function imageDelete()
     {
-        return !empty($this->input('image_del'));
+        return !empty($this->input('image_delete'));
     }
 }

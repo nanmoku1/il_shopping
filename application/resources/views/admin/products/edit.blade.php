@@ -74,8 +74,8 @@
                 @if(filled($product->image_path))
                     <div class="form-group">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" name="image_del" id="image_del" value="1">
-                            <label class="form-check-label" for="image_del">イメージ削除</label>
+                            <input class="form-check-input" type="checkbox" name="image_delete" id="image_delete" value="1">
+                            <label class="form-check-label" for="image_delete">イメージ削除</label>
                         </div>
                     </div>
                     <div class="form-group">

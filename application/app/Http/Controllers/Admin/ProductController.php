@@ -85,7 +85,7 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, Product $product)
     {
         $update_data = $request->validated();
-        if ($request->imageDel()) {
+        if ($request->imageDelete()) {
             $update_data["image_path"] = null;
         }
         $product->update($update_data);
