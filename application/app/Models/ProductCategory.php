@@ -13,13 +13,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $order_no
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $product
- * @property-read int|null $product_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
+ * @property-read int|null $products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory allProductCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory sort($sort_key, $sort_asc_desc)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory sort($column, $direction)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory whereName($value)
@@ -34,39 +35,61 @@ class ProductCategory extends Model
         'order_no',
     ];
 
-    public function product()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
     {
         return $this->hasMany(Product::class, "product_category_id", "id");
     }
 
+    /**
+     * @param Builder $query
+     * @param string $name
+     */
     public function scopeFuzzyName(Builder $query, string $name)
     {
         $query->where("name", "like", "%{$name}%");
     }
 
-    public function scopeSort(Builder $query, string $sort_key, string $sort_asc_desc)
+    /**
+     * @param Builder $query
+     * @param string $column
+     * @param string $direction
+     * @return Builder
+     */
+    public function scopeSort(Builder $query, string $column, string $direction)
     {
-        $order_by_key = null;
-        switch ($sort_key) {
+        $order_by_column = null;
+        switch ($column) {
             case "name":
-                $order_by_key = "name";
+                $order_by_column = "name";
                 break;
             case "order_no":
-                $order_by_key = "order_no";
+                $order_by_column = "order_no";
                 break;
             default:
-                $order_by_key = "id";
+                $order_by_column = "id";
         }
 
-        $order_by_asc_desc = null;
-        switch ($sort_asc_desc) {
+        $order_by_direction = null;
+        switch ($direction) {
             case "desc":
-                $order_by_asc_desc = "DESC";
+                $order_by_direction = "DESC";
                 break;
             default:
-                $order_by_asc_desc = "ASC";
+                $order_by_direction = "ASC";
         }
 
-        return $query->orderBy($order_by_key, $order_by_asc_desc);
+        return $query->orderBy($order_by_column, $order_by_direction);
+    }
+
+    /**
+     * @param Builder $query
+     * @return mixed
+     */
+    public function scopeAllProductCategories(Builder $query)
+    {
+        return $query->sort("order_no", "asc")->select(["id", "name", "order_no"]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\ProductCategories;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductCategoryEditRequest extends FormRequest
+class ProductCategoryUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -29,21 +29,5 @@ class ProductCategoryEditRequest extends FormRequest
             "name.max" => "カテゴリー名は255文字以内です。",
             "order_no.required" => "並び順番号は必須です。",
         ];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function name()
-    {
-        return $this->input('name');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function orderNo()
-    {
-        return $this->input('order_no');
     }
 }

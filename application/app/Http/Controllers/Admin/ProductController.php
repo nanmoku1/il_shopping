@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Products\ProductIndexRequest;
-use App\Http\Requests\Admin\Products\ProductCreateRequest;
-use App\Http\Requests\Admin\Products\ProductEditRequest;
+use App\Http\Requests\Admin\Products\ProductStoreRequest;
+use App\Http\Requests\Admin\Products\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 
@@ -17,30 +17,26 @@ class ProductController extends Controller
      */
     public function index(ProductIndexRequest $request)
     {
-        $product_categories = ProductCategory::sort("id", "asc")
-            ->select([
-                "id",
-                "name",
-            ])->get();
-        $builder_product = Product::leftJoinProductCategory()
-            ->select([
+        $product_categories = $this->_get_product_categories();
+        $product = Product::select([
                 "products.id",
                 "products.name",
-                "product_categories.name AS product_category_name",
+                "products.product_category_id",
                 "products.price",
-            ]);
+            ])
+            ->with("productCategory");
         if (filled($request->name())) {
-            $builder_product->fuzzyName($request->name());
+            $product->fuzzyName($request->name());
         }
         if (filled($request->price())) {
-            $builder_product->comparePrice($request->price(), $request->priceCompare());
+            $product->comparePrice($request->price(), $request->priceCompare());
         }
         if (filled($request->productCategoryId())) {
-            $builder_product->whereProductCategoryId($request->productCategoryId());
+            $product->whereProductCategoryId($request->productCategoryId());
         }
-        $builder_product->sort($request->sortColumn(), $request->sortDirection());
-        $products = $builder_product->paginate($request->pageUnit());
-        return view('admin.products.index', compact("products", "product_categories", "request"));
+        $product->sort($request->sortColumn(), $request->sortDirection());
+        $products = $product->paginate($request->pageUnit());
+        return view('admin.products.index', compact("products","product_categories"));
     }
 
     /**
@@ -57,23 +53,18 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $product_categories = ProductCategory::sort("id", "asc")
-            ->select([
-                "id",
-                "name",
-            ])->get();
+        $product_categories = $this->_get_product_categories();
         return view('admin.products.create', compact("product_categories"));
     }
 
     /**
-     * @param ProductCreateRequest $request
+     * @param ProductStoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ProductCreateRequest $request)
+    public function store(ProductStoreRequest $request)
     {
-
-        $create_product = Product::create($request->validated());
-        return redirect()->route("admin.products.show", $create_product->id);
+        $product = Product::create($request->validated());
+        return redirect()->route("admin.products.show", $product->id);
     }
 
     /**
@@ -82,30 +73,22 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $product_categories = ProductCategory::sort("id", "asc")
-            ->select([
-                "id",
-                "name",
-            ])->get();
+        $product_categories = $this->_get_product_categories();
         return view('admin.products.edit', compact("product", "product_categories"));
     }
 
     /**
-     * @param ProductEditRequest $request
+     * @param ProductUpdateRequest $request
      * @param Product $product
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProductEditRequest $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
-        $old_image_path = $product->image_path;
         $update_data = $request->validated();
-        if ($request->imageDel()) {
+        if ($request->imageDelete()) {
             $update_data["image_path"] = null;
         }
-        if ($product->update($update_data) && $old_image_path !== $product->image_path
-            && filled($old_image_path) && \Storage::exists($old_image_path)) {
-            \Storage::delete($old_image_path);
-        }
+        $product->update($update_data);
         return redirect()->route("admin.products.show", $product->id);
     }
 
@@ -119,10 +102,17 @@ class ProductController extends Controller
         $product->productReview()->delete();
         $product->wishProduct()->detach();
 
-        $old_image_path = $product->image_path;
-        if ($product->delete() && filled($old_image_path) && \Storage::exists($old_image_path)) {
-            \Storage::delete($old_image_path);
-        }
+        \Storage::delete($product->image_path);
+        $product->delete();
+
         return redirect()->route("admin.products.index");
+    }
+
+    /**
+     * @return ProductCategory[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     */
+    private function _get_product_categories()
+    {
+        return ProductCategory::sort("order_no", "asc")->select(["id", "name", "order_no"])->get();
     }
 }

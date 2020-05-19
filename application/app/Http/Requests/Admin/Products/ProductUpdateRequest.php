@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductCreateRequest extends FormRequest
+class ProductUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,13 +13,15 @@ class ProductCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             "product_category_id" => "required|exists:product_categories,id",
             "price" => "required|integer|min:0",
             "name" => "required|string|max:255",
             "description" => "nullable",
             "image_path" => "nullable|image",
+            "image_delete" => "nullable|boolean",
         ];
+        return $rules;
     }
 
     /**
@@ -40,42 +42,10 @@ class ProductCreateRequest extends FormRequest
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function productCategoryId()
+    public function imageDelete()
     {
-        return $this->input('product_category_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function price()
-    {
-        return $this->input('price');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function name()
-    {
-        return $this->input('name');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function description()
-    {
-        return $this->input('description');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function imagePath()
-    {
-        return $this->input('image_path');
+        return !empty($this->input('image_delete'));
     }
 }

@@ -14,7 +14,7 @@ class ProductCategoryIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            "sort_column" => "in:id,name,email",
+            "sort_column" => "in:id,name,order_no",
             "sort_direction" => "in:asc,desc",
             "page_unit" => "integer",
         ];

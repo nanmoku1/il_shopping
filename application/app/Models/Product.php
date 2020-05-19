@@ -24,11 +24,10 @@ use Illuminate\Http\UploadedFile;
  * @property-read int|null $wish_product_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product leftJoinProductCategory()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sort($sort_key, $sort_asc_desc)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sort($column, $direction)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product whereId($value)
@@ -54,6 +53,9 @@ class Product extends Model
         'image_path',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function productCategory()
     {
         return $this->hasOne(ProductCategory::class, "id", "product_category_id");
@@ -74,11 +76,20 @@ class Product extends Model
         $query->leftJoin("product_categories", "product_categories.id", "=", "products.product_category_id");
     }
 
+    /**
+     * @param Builder $query
+     * @param string $name
+     */
     public function scopeFuzzyName(Builder $query, string $name)
     {
         $query->where("products.name", "like", "%{$name}%");
     }
 
+    /**
+     * @param Builder $query
+     * @param int $price
+     * @param string $compare
+     */
     public function scopeComparePrice(Builder $query, int $price, string $compare)
     {
         switch ($compare) {
@@ -96,32 +107,34 @@ class Product extends Model
      * @param string $sort_asc_desc
      * @return Builder
      */
-    public function scopeSort(Builder $query, string $sort_key, string $sort_asc_desc)
+    public function scopeSort(Builder $query, string $column, string $direction)
     {
-        $order_by_asc_desc = null;
-        switch ($sort_asc_desc) {
+        $order_by_column = null;
+        switch ($direction) {
             case "desc":
-                $order_by_asc_desc = "DESC";
+                $order_by_column = "DESC";
                 break;
             default:
-                $order_by_asc_desc = "ASC";
+                $order_by_column = "ASC";
         }
 
-        $order_by_key = null;
-        switch ($sort_key) {
+        $order_by_direction = null;
+        switch ($column) {
             case "product_category":
-                return $query->orderBy("product_categories.order_no", $order_by_asc_desc)->orderBy("products.id", "ASC");
+                return $query->leftJoin("product_categories", "product_categories.id", "=", "products.product_category_id")
+                    ->orderBy("product_categories.order_no", $order_by_column)
+                    ->orderBy("products.id", "ASC");
                 break;
             case "name":
-                $order_by_key = "products.name";
+                $order_by_direction = "products.name";
                 break;
             case "price":
-                $order_by_key = "products.price";
+                $order_by_direction = "products.price";
                 break;
             default:
-                $order_by_key = "products.id";
+                $order_by_direction = "products.id";
         }
-        return $query->orderBy($order_by_key, $order_by_asc_desc);
+        return $query->orderBy($order_by_direction, $order_by_column);
     }
 
     /**
@@ -131,9 +144,9 @@ class Product extends Model
     {
         if (is_null($value)) {
             $this->attributes['image_path'] = null;
-            return;
+        } else {
+            $this->attributes['image_path'] = $value->store("product_images");
         }
-
-        $this->attributes['image_path'] = $value->store("product_images");
+        \Storage::delete($this->getOriginal("image_path"));
     }
 }

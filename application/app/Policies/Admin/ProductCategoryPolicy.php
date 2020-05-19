@@ -56,6 +56,6 @@ class ProductCategoryPolicy
     public function delete(AdminUser $login_user, ProductCategory $product_category)
     {
         //カテゴリーに紐づく商品が存在しない場合に削除可能
-        return $product_category->loadCount("product")->product_count === 0;
+        return $product_category->products()->doesntExist();
     }
 }
