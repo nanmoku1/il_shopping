@@ -25,10 +25,10 @@ use Illuminate\Http\UploadedFile;
  * @property-read int|null $product_reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishProducts
  * @property-read int|null $wish_products_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzyEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User prefixMatchEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User sort($sort_key, $sort_asc_desc)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
