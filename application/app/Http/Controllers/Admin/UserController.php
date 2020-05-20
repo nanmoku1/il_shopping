@@ -16,21 +16,21 @@ class UserController extends Controller
      */
     public function index(UserIndexRequest $request)
     {
-        $builder_user = User::select([
+        $user = User::select([
             "id",
             "name",
             "email",
         ]);
         if (filled($request->name())) {
-            $builder_user->fuzzyName($request->name());
+            $user->fuzzyName($request->name());
         }
         if (filled($request->email())) {
-            $builder_user->fuzzyEmail($request->email());
+            $user->fuzzyEmail($request->email());
         }
 
-        $builder_user->sort($request->sortColumn(), $request->sortDirection());
-        $users = $builder_user->paginate($request->pageUnit());
-        return view('admin.users.index', compact("users", "request"));
+        $user->sort($request->sortColumn(), $request->sortDirection());
+        $users = $user->paginate($request->pageUnit());
+        return view('admin.users.index', compact("users"));
     }
 
     /**
@@ -56,8 +56,8 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $create_user = User::create($request->validated());
-        return redirect()->route("admin.users.show", $create_user->id);
+        $user = User::create($request->validated());
+        return redirect()->route("admin.users.show", $user->id);
     }
 
     /**
