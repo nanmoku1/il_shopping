@@ -73,7 +73,7 @@ class AdminUser extends Authenticatable
      * @param Builder $query
      * @param string $email
      */
-    public function scopeFuzzyEmail(Builder $query, string $email)
+    public function scopePrefixMatchEmail(Builder $query, string $email)
     {
         $query->where("email", "like", "{$email}%");
     }
