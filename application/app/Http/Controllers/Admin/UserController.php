@@ -25,7 +25,7 @@ class UserController extends Controller
             $user->fuzzyName($request->name());
         }
         if (filled($request->email())) {
-            $user->prefixMatchEmail($request->email());
+            $user->forwardMatchEmail($request->email());
         }
 
         $user->sort($request->sortColumn(), $request->sortDirection());

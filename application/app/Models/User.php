@@ -106,7 +106,7 @@ class User extends Authenticatable
      * @param Builder $query
      * @param string $email
      */
-    public function scopePrefixMatchEmail(Builder $query, string $email)
+    public function scopeForwardMatchEmail(Builder $query, string $email)
     {
         $query->where("email", "like", "{$email}%");
     }
