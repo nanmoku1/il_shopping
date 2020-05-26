@@ -13,7 +13,7 @@ class ProductUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             "product_category_id" => "required|exists:product_categories,id",
             "price" => "required|integer|min:0",
             "name" => "required|string|max:255",
@@ -21,7 +21,6 @@ class ProductUpdateRequest extends FormRequest
             "image_path" => "nullable|image",
             "image_delete" => "nullable|boolean",
         ];
-        return $rules;
     }
 
     /**

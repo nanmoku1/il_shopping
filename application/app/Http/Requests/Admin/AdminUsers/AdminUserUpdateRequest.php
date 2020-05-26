@@ -15,7 +15,7 @@ class AdminUserUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             "name" => "required|string|max:255",
             "email" => [
                 "required",
@@ -27,7 +27,6 @@ class AdminUserUpdateRequest extends FormRequest
             "password" => "nullable|min:4|alpha_dash|confirmed",
             "is_owner" => "required|boolean",
         ];
-        return $rules;
     }
 
     /**

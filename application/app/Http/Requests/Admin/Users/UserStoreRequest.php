@@ -15,7 +15,7 @@ class UserStoreRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             "name" => "required|string|max:255",
             "email" => [
                 "required",
@@ -27,8 +27,6 @@ class UserStoreRequest extends FormRequest
             "password" => "required|min:4|alpha_dash|confirmed",
             "image_path" => "nullable|image",
         ];
-
-        return $rules;
     }
 
     /**
