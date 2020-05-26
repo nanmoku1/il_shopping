@@ -17,6 +17,12 @@
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware('auth:user')->group(function () {
+    Route::resource('users', 'UserController')->only([
+        'edit',
+        'update',
+    ]);
+});
 
 /**
  * 管理サイド
@@ -29,7 +35,6 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('logout', 'LoginController@logout')->name('logout');
         Route::get('home', 'HomeController@index')->name('home');
-        
         Route::resource('users', 'UserController');
         Route::resource('products', 'ProductController');
         Route::resource('product_categories', 'ProductCategoryController');
