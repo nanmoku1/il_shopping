@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <img class="img-thumbnail" src="{{ url("/storage/{$user->image_path}") }}">
+                <img class="img-thumbnail" src="{{ \Storage::url($user->image_path) }}">
             </div>
             @endif
 
