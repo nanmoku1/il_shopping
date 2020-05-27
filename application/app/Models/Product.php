@@ -54,6 +54,20 @@ class Product extends Model
     ];
 
     /**
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function($product) {
+            $product->productReviews()->delete();
+            $product->wishProductsUsers()->detach();
+            \Storage::delete($product->image_path);
+        });
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function productCategory()
