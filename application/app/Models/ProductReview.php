@@ -40,13 +40,19 @@ class ProductReview extends Model
         'rank',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
-        return $this->hasOne(User::class, "id", "user_id");
+        return $this->belongsTo(User::class, "user_id", "id");
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function product()
     {
-        return $this->hasOne(Product::class, "id", "product_id");
+        return $this->belongsTo(Product::class, "product_id", "id");
     }
 }
