@@ -25,10 +25,10 @@ use Illuminate\Http\UploadedFile;
  * @property-read int|null $product_reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishProducts
  * @property-read int|null $wish_products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User forwardMatchEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User prefixMatchEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User sort($sort_key, $sort_asc_desc)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
@@ -78,6 +78,20 @@ class User extends Authenticatable
     ];
 
     /**
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function($user) {
+            $user->productReviews()->delete();
+            $user->wishProducts()->detach();
+            \Storage::delete($user->image_path);
+        });
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function productReviews()
@@ -106,7 +120,7 @@ class User extends Authenticatable
      * @param Builder $query
      * @param string $email
      */
-    public function scopePrefixMatchEmail(Builder $query, string $email)
+    public function scopeForwardMatchEmail(Builder $query, string $email)
     {
         $query->where("email", "like", "{$email}%");
     }

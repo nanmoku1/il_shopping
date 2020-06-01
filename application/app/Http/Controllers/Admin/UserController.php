@@ -25,7 +25,7 @@ class UserController extends Controller
             $user->fuzzyName($request->name());
         }
         if (filled($request->email())) {
-            $user->prefixMatchEmail($request->email());
+            $user->forwardMatchEmail($request->email());
         }
 
         $user->sort($request->sortColumn(), $request->sortDirection());
@@ -91,10 +91,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->productReviews()->delete();
-        $user->wishProducts()->detach();
-
-        \Storage::delete($user->image_path);
         $user->delete();
         return redirect()->route("admin.users.index");
     }

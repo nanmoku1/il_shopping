@@ -20,8 +20,8 @@ use Illuminate\Http\UploadedFile;
  * @property-read \App\Models\ProductCategory $productCategory
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductReview[] $productReviews
  * @property-read int|null $product_reviews_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishProducts
- * @property-read int|null $wish_products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishProductsUsers
+ * @property-read int|null $wish_products_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
@@ -54,6 +54,20 @@ class Product extends Model
     ];
 
     /**
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function($product) {
+            $product->productReviews()->delete();
+            $product->wishProductsUsers()->detach();
+            \Storage::delete($product->image_path);
+        });
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function productCategory()
@@ -72,9 +86,9 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function wishProducts()
+    public function wishProductsUsers()
     {
-        return $this->belongsToMany(User::class, "wish_products","product_id", "user_id");
+        return $this->belongsToMany(User::class, "wish_products", "product_id", "user_id");
     }
 
     /**
