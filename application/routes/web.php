@@ -29,7 +29,8 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('logout', 'LoginController@logout')->name('logout');
         Route::get('home', 'HomeController@index')->name('home');
-
+        
+        Route::resource('users', 'UserController');
         Route::resource('products', 'ProductController');
         Route::resource('product_categories', 'ProductCategoryController');
         Route::resource('admin_users', 'AdminUserController');

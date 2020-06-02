@@ -18,6 +18,10 @@ use Illuminate\Http\UploadedFile;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\ProductCategory $productCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductReview[] $productReviews
+ * @property-read int|null $product_reviews_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishedUsers
+ * @property-read int|null $wished_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
@@ -50,11 +54,41 @@ class Product extends Model
     ];
 
     /**
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function($product) {
+            $product->productReviews()->delete();
+            $product->wishedUsers()->detach();
+            \Storage::delete($product->image_path);
+        });
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function productCategory()
     {
         return $this->hasOne(ProductCategory::class, "id", "product_category_id");
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function productReviews()
+    {
+        return $this->hasMany(ProductReview::class, "product_id", "id");
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function wishedUsers()
+    {
+        return $this->belongsToMany(User::class, "wish_products", "product_id", "user_id");
     }
 
     /**

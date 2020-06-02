@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Admin\AdminUsers;
+namespace App\Http\Requests\Admin\Users;
 
-use App\Models\AdminUser;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AdminUserUpdateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -22,10 +22,11 @@ class AdminUserUpdateRequest extends FormRequest
                 "string",
                 "email",
                 "max:255",
-                Rule::unique(AdminUser::class)->ignore($this->admin_user),
+                Rule::unique(User::class)->ignore($this->user),
             ],
             "password" => "nullable|min:4|alpha_dash|confirmed",
-            "is_owner" => "required|boolean",
+            "image_path" => "nullable|image",
+            "image_delete" => "nullable|boolean",
         ];
     }
 
@@ -43,6 +44,15 @@ class AdminUserUpdateRequest extends FormRequest
             "email.unique" => "既に登録されているメールアドレスです。",
             "password.min" => "パスワードが4文字以下です。",
             "password.confirmed" => "パスワードが確認と一致していません。",
+            "image_path.image" => "イメージは画像ファイルをアップロードしてください。。",
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function imageDelete()
+    {
+        return !empty($this->input('image_delete'));
     }
 }

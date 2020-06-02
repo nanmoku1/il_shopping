@@ -42,7 +42,7 @@
             @if(filled($product->image_path))
                 <tr>
                     <th>イメージ</th>
-                    <td><img class="img-thumbnail" src="{{ url("/storage/{$product->image_path}") }}"></td>
+                    <td><img class="img-thumbnail" src="{{ \Storage::url($product->image_path) }}"></td>
                 </tr>
             @endif
         </tbody>

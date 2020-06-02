@@ -99,7 +99,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        \Storage::delete($product->image_path);
         $product->delete();
         return redirect()->route("admin.products.index");
     }

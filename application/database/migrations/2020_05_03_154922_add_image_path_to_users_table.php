@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsOwnerToAdminUsersTable extends Migration
+class AddImagePathToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddIsOwnerToAdminUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('admin_users', function (Blueprint $table) {
-            $table->boolean('is_owner')->default(false)->after('password');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('image_path')->nullable()->after('remember_token');
         });
     }
 
@@ -25,8 +25,8 @@ class AddIsOwnerToAdminUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('admin_users', function (Blueprint $table) {
-            $table->dropColumn('is_owner');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('image_path');
         });
     }
 }
