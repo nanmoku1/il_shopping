@@ -70,7 +70,7 @@
                                     <input type="checkbox" class="form-check-input" id="image_delete" name="image_delete" value="1">
                                     <label for="image_delete">削除</label>
                                 </div>
-                                <img class="img-thumbnail" width="100" src="{{ url("/storage/{$user->image_path}") }}">
+                                <img class="img-thumbnail" width="100" src="{{ \Storage::url($user->image_path) }}">
                                 @endif
                             </div>
                         </div>

@@ -15,7 +15,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             "name" => "required|string|max:255",
             "email" => [
                 "required",
@@ -28,7 +28,6 @@ class UserUpdateRequest extends FormRequest
             "image_path" => "nullable|image",
             "image_delete" => "nullable|boolean",
         ];
-        return $rules;
     }
 
     /**
