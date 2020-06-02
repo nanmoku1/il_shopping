@@ -20,8 +20,8 @@ use Illuminate\Http\UploadedFile;
  * @property-read \App\Models\ProductCategory $productCategory
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductReview[] $productReviews
  * @property-read int|null $product_reviews_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishProductsUsers
- * @property-read int|null $wish_products_users_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishedUsers
+ * @property-read int|null $wished_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
@@ -62,7 +62,7 @@ class Product extends Model
 
         self::deleting(function($product) {
             $product->productReviews()->delete();
-            $product->wishProductsUsers()->detach();
+            $product->wishedUsers()->detach();
             \Storage::delete($product->image_path);
         });
     }
@@ -86,7 +86,7 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function wishProductsUsers()
+    public function wishedUsers()
     {
         return $this->belongsToMany(User::class, "wish_products", "product_id", "user_id");
     }

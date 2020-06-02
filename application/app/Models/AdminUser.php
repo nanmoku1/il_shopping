@@ -15,10 +15,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property bool $is_owner
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser forwardMatchEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser fuzzyName($name)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser prefixMatchEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser sort($column, $direction)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser whereCreatedAt($value)
