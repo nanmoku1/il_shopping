@@ -53,6 +53,6 @@ class UserUpdateRequest extends FormRequest
      */
     public function imageDelete()
     {
-        return !empty($this->input('image_delete'));
+        return filled($this->input('image_delete'));
     }
 }
