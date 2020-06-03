@@ -36,4 +36,15 @@ class ResetPasswordController extends Controller
             'password' => 'required|alpha_dash|confirmed|min:4',
         ];
     }
+
+    /**
+     * @param \Illuminate\Contracts\Auth\CanResetPassword $user
+     * @param string $password
+     */
+    protected function setUserPassword($user, $password)
+    {
+        $user->password = $password;
+    }
+
+
 }

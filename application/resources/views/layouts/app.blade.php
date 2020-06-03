@@ -28,26 +28,26 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-            @guest
-                <li class="nav-item">
-                    <a href="{{ route('register') }}" class="nav-link">新規登録</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('login') }}" class="nav-link">ログイン</a>
-                </li>
-            @else
+            @auth('user')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ auth()->user()->name }}
+                        {{ auth('user')->user()->name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">ユーザー情報編集</a>
+                    <a class="dropdown-item" href="{{ route('users.edit', auth('user')->user()->id) }}">ユーザー情報編集</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">ログアウト</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                     </div>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a href="{{ route('register') }}" class="nav-link">新規登録</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('login') }}" class="nav-link">ログイン</a>
                 </li>
             @endguest
         </ul>

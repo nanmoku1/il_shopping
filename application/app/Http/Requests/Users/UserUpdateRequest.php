@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Users;
+namespace App\Http\Requests\Users;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -44,7 +44,7 @@ class UserUpdateRequest extends FormRequest
             "email.unique" => "既に登録されているメールアドレスです。",
             "password.min" => "パスワードが4文字以下です。",
             "password.confirmed" => "パスワードが確認と一致していません。",
-            "image_path.image" => "イメージは画像ファイルをアップロードしてください。。",
+            "image_path.image" => "イメージは画像ファイルをアップロードしてください。",
         ];
     }
 
