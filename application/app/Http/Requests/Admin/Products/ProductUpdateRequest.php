@@ -45,6 +45,6 @@ class ProductUpdateRequest extends FormRequest
      */
     public function imageDelete()
     {
-        return filled($this->input('image_delete'));
+        return $this->filled('image_delete');
     }
 }
