@@ -17,11 +17,17 @@
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('products', 'ProductController')->only([
+    'index',
+]);
 Route::middleware('auth:user')->group(function () {
     Route::resource('users', 'UserController')->only([
         'edit',
         'update',
     ]);
+
+    Route::post('/wish_products/{product}', 'WishProductController@store');
+    Route::delete('/wish_products/{product}', 'WishProductController@destroy');
 });
 
 /**
