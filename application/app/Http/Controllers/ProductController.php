@@ -37,7 +37,6 @@ class ProductController extends Controller
         $product->sort($sort_conditions["column"], $sort_conditions["direction"]);
 
         $products = $product->paginate(5);
-        //logger(\App\DebugFunc::dumpStr($products));
         $specified_category = $this->getSpecifiedCategory($request->productCategoryId());
         return view('products.index', compact('products', 'specified_category'));
     }
