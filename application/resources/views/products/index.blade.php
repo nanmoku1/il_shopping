@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md border shadow-sm py-2 d-flex">
-            <div>検索結果 {{ $products->total() }} のうち {{ $products->firstItem() }}-{{ $products->lastItem() }}件 <span class="font-weight-bold">{{ $specified_category }}</span> </div>
+            <div>検索結果 {{ $products->total() }} のうち {{ $products->firstItem() }}-{{ $products->lastItem() }}件 @if(filled($specified_category))<span class="font-weight-bold">{{ $specified_category }}</span>@endif @if(filled($specified_category) && request()->filled("keyword")) : @endif @if(request()->filled("keyword"))<span class="text-danger">"{{ request("keyword") }}"</span>@endif </div>
             <form class="ml-auto" action="{{ route("products.index") }}">
                 <input type="hidden" name="product_category_id" value="{{ request("product_category_id") }}">
                 <input type="hidden" name="keyword" value="{{ request("keyword") }}">

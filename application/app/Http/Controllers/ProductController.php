@@ -36,7 +36,8 @@ class ProductController extends Controller
         $sort_conditions = $request->sort();
         $product->sort($sort_conditions["column"], $sort_conditions["direction"]);
 
-        $products = $product->paginate(5);
+        $products = $product->paginate(15);
+
         $specified_category = $this->getSpecifiedCategory($request->productCategoryId());
         return view('products.index', compact('products', 'specified_category'));
     }
@@ -47,9 +48,8 @@ class ProductController extends Controller
      */
     private function getSpecifiedCategory($product_category_id)
     {
-        $specified_category = "すべてのカテゴリー";
+        $specified_category = "";
         if (filled($product_category_id)) {
-            $specified_category = "";
             if ($product_category = ProductCategory::select(["name"])->where("id", $product_category_id)->first()) {
                 $specified_category = $product_category->name;
             }
