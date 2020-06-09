@@ -14,10 +14,7 @@ class WishProductController extends Controller
     public function store(Product $product)
     {
         try {
-            \DB::table('wish_products')->insert([
-                'user_id' => auth('user')->user()->id,
-                'product_id' => $product->id,
-            ]);
+            $product->wishedUsers()->attach(auth('user')->user()->id);
         }
         catch (\Exception $error) {
             return [
@@ -36,10 +33,7 @@ class WishProductController extends Controller
     public function destroy(Product $product)
     {
         try {
-            \DB::table('wish_products')
-                ->where('product_id', $product->id)
-                ->where('user_id', auth('user')->user()->id)
-                ->delete();
+            $product->wishedUsers()->detach(auth('user')->user()->id);
         }
         catch (\Exception $error) {
             return [

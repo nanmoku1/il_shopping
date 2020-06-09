@@ -16,12 +16,10 @@
  */
 Auth::routes();
 
-Route::middleware('product.categories')->group(function () {
-    Route::get('/home', 'HomeController@index')->name('home');
-    Route::resource('products', 'ProductController')->only([
-        'index',
-    ]);
-});
+Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('products', 'ProductController')->only([
+    'index',
+]);
 
 Route::middleware('auth:user')->group(function () {
     Route::resource('users', 'UserController')->only([
