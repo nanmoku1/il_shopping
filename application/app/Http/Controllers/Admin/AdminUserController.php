@@ -24,12 +24,7 @@ class AdminUserController extends Controller
      */
     public function index(AdminUserIndexRequest $request)
     {
-        $admin_user = AdminUser::select([
-            "id",
-            "name",
-            "email",
-            "is_owner",
-        ]);
+        $admin_user = AdminUser::query();
         if (filled($request->name())) {
             $admin_user->fuzzyName($request->name());
         }

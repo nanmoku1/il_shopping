@@ -44,7 +44,7 @@ class ProductController extends Controller
     {
         $specified_category = "";
         if (filled($product_category_id)) {
-            if ($product_category = ProductCategory::where("id", $product_category_id)->first()) {
+            if ($product_category = ProductCategory::find($product_category_id)) {
                 $specified_category = $product_category->name;
             }
         }

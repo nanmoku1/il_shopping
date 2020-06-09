@@ -90,6 +90,6 @@ class ProductCategory extends Model
      */
     public function scopeAllProductCategories(Builder $query)
     {
-        return $query->sort("order_no", "asc")->select(["id", "name", "order_no"]);
+        return $query->sort("order_no", "asc");
     }
 }
