@@ -141,15 +141,12 @@ class Product extends Model
                     ->orderBy("products.id", "ASC");
                 break;
             case "review_rank":
-                $sub_query_product_review = ProductReview::select([
-                    "product_id",
-                    \DB::raw("avg(`rank`) as rank_avg"),
-                ])
-                    ->groupBy("product_id");
-                return $query->leftJoin(\DB::raw("({$sub_query_product_review->toSql()}) as product_review_avg")
-                    , "product_review_avg.product_id", "=", "products.id")
-                    ->orderBy("product_review_avg.rank_avg", $order_by_column)
-                    ->orderBy("products.id", "ASC");
+                return $query
+                    ->leftJoin('product_reviews', 'product_reviews.product_id', '=', 'products.id')
+                    ->groupBy('products.id')
+                    ->select('products.*')
+                    ->orderByRaw('avg(`product_reviews`.`rank`) desc')
+                    ->orderBy('products.id', 'asc');
                 break;
             case "name":
                 $order_by_direction = "products.name";
