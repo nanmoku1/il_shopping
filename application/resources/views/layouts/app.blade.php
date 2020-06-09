@@ -27,6 +27,17 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline my-2 my-lg-0" action="{{ route("products.index") }}">
+            <select class="custom-select mr-sm-2" name="product_category_id">
+                <option value=''>すべてのカテゴリー</option>
+                @foreach($product_categories as $product_category)
+                    <option value='{{ $product_category->id }}' {{ intval(request("product_category_id")) === $product_category->id ? "selected" : "" }}>{{ $product_category->name }}</option>
+                @endforeach
+            </select>
+            <input class="form-control mr-sm-2" type="search" name="keyword" value="{{ request("keyword") }}" placeholder="商品検索">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">検索</button>
+        </form>
+
         <ul class="navbar-nav ml-auto">
             @auth('user')
                 <li class="nav-item dropdown">

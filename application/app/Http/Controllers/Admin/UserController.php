@@ -16,11 +16,7 @@ class UserController extends Controller
      */
     public function index(UserIndexRequest $request)
     {
-        $user = User::select([
-            "id",
-            "name",
-            "email",
-        ]);
+        $user = User::query();
         if (filled($request->name())) {
             $user->fuzzyName($request->name());
         }

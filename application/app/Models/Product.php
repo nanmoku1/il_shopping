@@ -140,6 +140,14 @@ class Product extends Model
                     ->orderBy("product_categories.order_no", $order_by_column)
                     ->orderBy("products.id", "ASC");
                 break;
+            case "review_rank":
+                return $query
+                    ->leftJoin('product_reviews', 'product_reviews.product_id', '=', 'products.id')
+                    ->groupBy('products.id')
+                    ->select('products.*')
+                    ->orderByRaw('avg(`product_reviews`.`rank`) desc')
+                    ->orderBy('products.id', 'asc');
+                break;
             case "name":
                 $order_by_direction = "products.name";
                 break;
