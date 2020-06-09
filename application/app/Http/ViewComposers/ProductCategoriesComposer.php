@@ -12,7 +12,7 @@ class ProductCategoriesComposer
      */
     public function compose(View $view)
     {
-        $product_categories = ProductCategory::sort("order_no", "asc")->select(["id", "name", "order_no"])->get();
+        $product_categories = ProductCategory::sort("order_no", "asc")->get();
         $view->with(compact('product_categories'));
     }
 }

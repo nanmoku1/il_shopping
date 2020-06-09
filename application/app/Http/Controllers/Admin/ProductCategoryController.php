@@ -25,11 +25,7 @@ class ProductCategoryController extends Controller
      */
     public function index(ProductCategoryIndexRequest $request)
     {
-        $product_category = ProductCategory::select([
-            "id",
-            "name",
-            "order_no",
-        ]);
+        $product_category = ProductCategory::query();
         if (filled($request->name())) {
             $product_category->fuzzyName($request->name());
         }

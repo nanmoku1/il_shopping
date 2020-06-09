@@ -15,13 +15,7 @@ class ProductController extends Controller
      */
     public function index(ProductIndexRequest $request)
     {
-        $product = Product::select([
-            "products.id",
-            "products.name",
-            "products.product_category_id",
-            "products.price",
-            "products.image_path",
-        ]);
+        $product = Product::query();
         if (auth('user')->user()) {
             $product->with(['wishedUsers' => function($query) {
                 $query->where('wish_products.user_id', auth('user')->user()->id);
@@ -50,7 +44,7 @@ class ProductController extends Controller
     {
         $specified_category = "";
         if (filled($product_category_id)) {
-            if ($product_category = ProductCategory::select(["name"])->where("id", $product_category_id)->first()) {
+            if ($product_category = ProductCategory::where("id", $product_category_id)->first()) {
                 $specified_category = $product_category->name;
             }
         }
