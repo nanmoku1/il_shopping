@@ -19,6 +19,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('products', 'ProductController')->only([
     'index',
+    'show',
 ]);
 
 Route::middleware('auth:user')->group(function () {
@@ -29,6 +30,11 @@ Route::middleware('auth:user')->group(function () {
 
     Route::post('/wish_products/{product}', 'WishProductController@store');
     Route::delete('/wish_products/{product}', 'WishProductController@destroy');
+
+    Route::get('/products/{product}/product_reviews/create', 'ProductReviewController@create')->name('product_reviews.create');
+    Route::post('/products/{product}/product_reviews', 'ProductReviewController@store')->name('product_reviews.store');
+    Route::get('/products/{product}/product_reviews/{product_review}/edit', 'ProductReviewController@edit')->name('product_reviews.edit');
+    Route::put('/products/{product}/product_reviews/{product_review}', 'ProductReviewController@update')->name('product_reviews.update');
 });
 
 /**
