@@ -30,8 +30,8 @@ class ProductReviewController extends Controller
             array_merge(
                 $request->validated(),
                 [
-                    "user_id"=>auth("user")->user()->id,
-                    "product_id"=>$product->id,
+                    "user_id" => auth("user")->user()->id,
+                    "product_id" => $product->id,
                 ]
             )
         );
