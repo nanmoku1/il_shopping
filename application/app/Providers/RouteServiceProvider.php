@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use \App\Models\ProductReview;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -39,14 +38,6 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
-        Route::bind('product_review', function($value) {
-            $product_review = ProductReview::find($value) ?? abort(404);
-            if (!auth('user')->check() || $product_review->user_id !== auth('user')->user()->id) {
-                abort(403);
-            }
-            return $product_review;
-        });
-
     }
 
     /**

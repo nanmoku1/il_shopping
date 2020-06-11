@@ -39,7 +39,7 @@
     @auth("user")
         <div class="row mt-3">
             <div class="col-md">
-                <a class="btn btn-primary" href="{{ route("product_reviews.create", $product->id) }}">レビューを書く</a>
+                <a class="btn btn-primary" href="{{ route("products.product_reviews.create", $product->id) }}">レビューを書く</a>
             </div>
         </div>
     @endauth
@@ -56,7 +56,7 @@
                             <h6>{{ $product_review->user->name }}</h6>
                             <h5>
                                 @if(auth('user')->check() && auth('user')->user()->id === $product_review->user_id)
-                                    <a href="{{ route("product_reviews.edit", [$product->id, $product_review->id]) }}">
+                                    <a href="{{ route("products.product_reviews.edit", [$product->id, $product_review->id]) }}">
                                         {{ $product_review->title }}
                                     </a>
                                 @else

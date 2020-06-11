@@ -45,6 +45,7 @@ class ProductReviewController extends Controller
      */
     public function edit(Product $product, ProductReview $product_review)
     {
+        $this->productReviewMyselfRestrict($product_review);
         return view('product_reviews.edit', compact('product', 'product_review'));
     }
 
@@ -56,7 +57,19 @@ class ProductReviewController extends Controller
      */
     public function update(ProductReviewUpdateRequest $request, Product $product, ProductReview $product_review)
     {
+        $this->productReviewMyselfRestrict($product_review);
         $product_review->update($request->validated());
         return redirect()->route("products.show", $product->id);
+    }
+
+    /**
+     * @param ProductReview $product_review
+     */
+    private function productReviewMyselfRestrict(ProductReview $product_review)
+    {
+        abort_if(
+            !auth('user')->check() || $product_review->user_id !== auth('user')->user()->id,
+            403
+        );
     }
 }
