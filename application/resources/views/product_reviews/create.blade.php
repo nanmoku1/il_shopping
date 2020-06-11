@@ -25,8 +25,7 @@
                     @enderror
                 </div>
 
-                @component('product_reviews.components.rank_input_radioes', ['rank' => old('rank')])
-                @endcomponent
+                @include('product_reviews.components.rank_input_radioes', ['rank' => old('rank')])
 
                 <hr class="mb-3">
 
