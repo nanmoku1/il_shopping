@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\UploadedFile;
+use App\Models\ModelTraits\ScopeUserNameEmailExtraction;
 
 /**
  * App\Models\User
@@ -44,7 +45,7 @@ use Illuminate\Http\UploadedFile;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, ScopeUserNameEmailExtraction;
 
     /**
      * The attributes that are mass assignable.
@@ -105,24 +106,6 @@ class User extends Authenticatable
     public function wishProducts()
     {
         return $this->belongsToMany(Product::class, "wish_products","user_id", "product_id");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("name", "like", "%{$name}%");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $email
-     */
-    public function scopeForwardMatchEmail(Builder $query, string $email)
-    {
-        $query->where("email", "like", "{$email}%");
     }
 
     /**

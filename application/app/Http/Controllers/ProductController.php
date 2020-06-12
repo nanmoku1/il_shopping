@@ -15,7 +15,9 @@ class ProductController extends Controller
      */
     public function index(ProductIndexRequest $request)
     {
-        $product = Product::query();
+        $product = Product::select([
+            "products.*",
+        ]);
         if (auth('user')->check()) {
             $product->with(['wishedUsers' => function($query) {
                 $query->where('wish_products.user_id', auth('user')->user()->id);

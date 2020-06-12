@@ -18,7 +18,10 @@ class ProductController extends Controller
     public function index(ProductIndexRequest $request)
     {
         $product_categories = $this->_get_product_categories();
-        $product = Product::with("productCategory");
+        $product = Product::select([
+            "products.*",
+        ])
+            ->with("productCategory");
         if (filled($request->name())) {
             $product->fuzzyName($request->name());
         }

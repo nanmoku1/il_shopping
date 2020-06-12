@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use App\Models\ModelTraits\ScopeFuzzyName;
 
 /**
  * App\Models\Product
@@ -40,6 +41,8 @@ use Illuminate\Http\UploadedFile;
  */
 class Product extends Model
 {
+    use ScopeFuzzyName;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -89,15 +92,6 @@ class Product extends Model
     public function wishedUsers()
     {
         return $this->belongsToMany(User::class, "wish_products", "product_id", "user_id");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("products.name", "like", "%{$name}%");
     }
 
     /**

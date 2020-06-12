@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ModelTraits\ScopeFuzzyName;
 
 /**
  * App\Models\ProductCategory
@@ -29,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductCategory extends Model
 {
+    use ScopeFuzzyName;
+
     protected $fillable = [
         'name',
         'order_no',
@@ -40,15 +43,6 @@ class ProductCategory extends Model
     public function products()
     {
         return $this->hasMany(Product::class, "product_category_id", "id");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("name", "like", "%{$name}%");
     }
 
     /**

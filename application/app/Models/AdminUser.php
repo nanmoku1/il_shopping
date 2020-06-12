@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\ModelTraits\ScopeUserNameEmailExtraction;
 
 /**
  * App\Models\AdminUser
@@ -32,6 +33,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class AdminUser extends Authenticatable
 {
+    use ScopeUserNameEmailExtraction;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,24 +62,6 @@ class AdminUser extends Authenticatable
     protected $casts = [
         'is_owner' => 'boolean'
     ];
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("name", "like", "%{$name}%");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $email
-     */
-    public function scopeForwardMatchEmail(Builder $query, string $email)
-    {
-        $query->where("email", "like", "{$email}%");
-    }
 
     /**
      * @param Builder $query
