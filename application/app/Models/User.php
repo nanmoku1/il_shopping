@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\UploadedFile;
-use App\Models\ModelTraits\ScopeWhereTrait;
+use App\Models\Traits\ScopeFuzzyTrait;
+use App\Models\Traits\ScopeForwardMatchTrait;
 
 /**
  * App\Models\User
@@ -45,7 +46,7 @@ use App\Models\ModelTraits\ScopeWhereTrait;
  */
 class User extends Authenticatable
 {
-    use Notifiable, ScopeWhereTrait;
+    use Notifiable, ScopeFuzzyTrait, ScopeForwardMatchTrait;
 
     /**
      * The attributes that are mass assignable.

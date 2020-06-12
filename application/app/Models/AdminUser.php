@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\ModelTraits\ScopeWhereTrait;
+use App\Models\Traits\ScopeFuzzyTrait;
+use App\Models\Traits\ScopeForwardMatchTrait;
 
 /**
  * App\Models\AdminUser
@@ -33,7 +34,7 @@ use App\Models\ModelTraits\ScopeWhereTrait;
  */
 class AdminUser extends Authenticatable
 {
-    use ScopeWhereTrait;
+    use ScopeFuzzyTrait, ScopeForwardMatchTrait;
 
     /**
      * The attributes that are mass assignable.

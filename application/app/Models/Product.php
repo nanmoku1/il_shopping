@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
-use App\Models\ModelTraits\ScopeWhereTrait;
+use App\Models\Traits\ScopeFuzzyTrait;
 
 /**
  * App\Models\Product
@@ -24,7 +24,6 @@ use App\Models\ModelTraits\ScopeWhereTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishedUsers
  * @property-read int|null $wished_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product forwardMatch($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzy($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newQuery()
@@ -42,7 +41,7 @@ use App\Models\ModelTraits\ScopeWhereTrait;
  */
 class Product extends Model
 {
-    use ScopeWhereTrait;
+    use ScopeFuzzyTrait;
 
     /**
      * The attributes that are mass assignable.

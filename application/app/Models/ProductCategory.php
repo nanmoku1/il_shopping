@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ModelTraits\ScopeWhereTrait;
+use App\Models\Traits\ScopeFuzzyTrait;
 
 /**
  * App\Models\ProductCategory
@@ -16,7 +16,6 @@ use App\Models\ModelTraits\ScopeWhereTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
  * @property-read int|null $products_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory forwardMatch($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory fuzzy($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newQuery()
@@ -31,7 +30,7 @@ use App\Models\ModelTraits\ScopeWhereTrait;
  */
 class ProductCategory extends Model
 {
-    use ScopeWhereTrait;
+    use ScopeFuzzyTrait;
 
     protected $fillable = [
         'name',
