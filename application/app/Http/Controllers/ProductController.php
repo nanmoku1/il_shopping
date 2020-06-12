@@ -15,14 +15,16 @@ class ProductController extends Controller
      */
     public function index(ProductIndexRequest $request)
     {
-        $product = Product::query();
+        $product = Product::select([
+            "products.*"
+        ]);
         if (auth('user')->check()) {
             $product->with(['wishedUsers' => function($query) {
                 $query->where('wish_products.user_id', auth('user')->user()->id);
             }]);
         }
         if (filled($request->keyword())) {
-            $product->fuzzyName($request->keyword());
+            $product->fuzzy("products.name", $request->keyword());
         }
         if (filled($request->productCategoryId())) {
             $product->whereProductCategoryId($request->productCategoryId());

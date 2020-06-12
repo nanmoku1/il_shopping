@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\UploadedFile;
+use App\Models\Traits\ScopeFuzzyTrait;
+use App\Models\Traits\ScopeForwardMatchTrait;
 
 /**
  * App\Models\User
@@ -25,8 +27,8 @@ use Illuminate\Http\UploadedFile;
  * @property-read int|null $product_reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishProducts
  * @property-read int|null $wish_products_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User forwardMatchEmail($email)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzyName($name)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User forwardMatch($column, $keyword)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User fuzzy($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
@@ -44,7 +46,7 @@ use Illuminate\Http\UploadedFile;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, ScopeFuzzyTrait, ScopeForwardMatchTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -105,24 +107,6 @@ class User extends Authenticatable
     public function wishProducts()
     {
         return $this->belongsToMany(Product::class, "wish_products","user_id", "product_id");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("name", "like", "%{$name}%");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $email
-     */
-    public function scopeForwardMatchEmail(Builder $query, string $email)
-    {
-        $query->where("email", "like", "{$email}%");
     }
 
     /**

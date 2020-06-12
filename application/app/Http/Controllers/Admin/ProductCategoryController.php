@@ -27,7 +27,7 @@ class ProductCategoryController extends Controller
     {
         $product_category = ProductCategory::query();
         if (filled($request->name())) {
-            $product_category->fuzzyName($request->name());
+            $product_category->fuzzy("product_categories.name", $request->name());
         }
 
         $product_category->sort($request->sortColumn(), $request->sortDirection());

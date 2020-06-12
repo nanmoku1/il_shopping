@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\ScopeFuzzyTrait;
 
 /**
  * App\Models\ProductCategory
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
  * @property-read int|null $products_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory fuzzyName($name)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory fuzzy($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductCategory query()
@@ -29,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductCategory extends Model
 {
+    use ScopeFuzzyTrait;
+
     protected $fillable = [
         'name',
         'order_no',
@@ -40,15 +43,6 @@ class ProductCategory extends Model
     public function products()
     {
         return $this->hasMany(Product::class, "product_category_id", "id");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("name", "like", "%{$name}%");
     }
 
     /**

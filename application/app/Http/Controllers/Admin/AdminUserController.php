@@ -26,10 +26,10 @@ class AdminUserController extends Controller
     {
         $admin_user = AdminUser::query();
         if (filled($request->name())) {
-            $admin_user->fuzzyName($request->name());
+            $admin_user->fuzzy("name", $request->name());
         }
         if (filled($request->email())) {
-            $admin_user->forwardMatchEmail($request->email());
+            $admin_user->forwardMatch("email", $request->email());
         }
         if (filled($request->authority())) {
             $admin_user->whereIsOwner($request->authority());
