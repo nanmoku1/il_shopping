@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use App\Models\ModelTraits\ScopeWhereTrait;
 
 /**
  * App\Models\Product
@@ -23,7 +24,8 @@ use Illuminate\Http\UploadedFile;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishedUsers
  * @property-read int|null $wished_users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product comparePrice($price, $compare)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzyName($name)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product forwardMatch($column, $keyword)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product fuzzy($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product query()
@@ -40,6 +42,8 @@ use Illuminate\Http\UploadedFile;
  */
 class Product extends Model
 {
+    use ScopeWhereTrait;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -89,15 +93,6 @@ class Product extends Model
     public function wishedUsers()
     {
         return $this->belongsToMany(User::class, "wish_products", "product_id", "user_id");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("products.name", "like", "%{$name}%");
     }
 
     /**

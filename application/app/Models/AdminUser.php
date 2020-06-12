@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\ModelTraits\ScopeWhereTrait;
 
 /**
  * App\Models\AdminUser
@@ -15,8 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property bool $is_owner
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser forwardMatchEmail($email)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser fuzzyName($name)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser forwardMatch($column, $keyword)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser fuzzy($column, $keyword)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AdminUser query()
@@ -32,6 +33,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class AdminUser extends Authenticatable
 {
+    use ScopeWhereTrait;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,24 +62,6 @@ class AdminUser extends Authenticatable
     protected $casts = [
         'is_owner' => 'boolean'
     ];
-
-    /**
-     * @param Builder $query
-     * @param string $name
-     */
-    public function scopeFuzzyName(Builder $query, string $name)
-    {
-        $query->where("name", "like", "%{$name}%");
-    }
-
-    /**
-     * @param Builder $query
-     * @param string $email
-     */
-    public function scopeForwardMatchEmail(Builder $query, string $email)
-    {
-        $query->where("email", "like", "{$email}%");
-    }
 
     /**
      * @param Builder $query

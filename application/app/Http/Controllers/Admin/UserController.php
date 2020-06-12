@@ -18,10 +18,10 @@ class UserController extends Controller
     {
         $user = User::query();
         if (filled($request->name())) {
-            $user->fuzzyName($request->name());
+            $user->fuzzy("name", $request->name());
         }
         if (filled($request->email())) {
-            $user->forwardMatchEmail($request->email());
+            $user->forwardMatch("email", $request->email());
         }
 
         $user->sort($request->sortColumn(), $request->sortDirection());
