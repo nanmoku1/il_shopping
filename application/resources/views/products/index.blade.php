@@ -21,13 +21,13 @@
         @foreach($products as $product)
             <div class="col-md-4">
                 <div class="card mb-4">
-                    <a href="#" target="_blank">
+                    <a href="{{ route("products.show", $product->id) }}" target="_blank">
                         @if(filled($product->image_path))
                             <img class="card-img-top bd-placeholder-img" src="{{ \Storage::url($product->image_path) }}">
                         @endif
                     </a>
                     <div class="card-body">
-                        <a href="#" target="_blank">
+                        <a href="{{ route("products.show", $product->id) }}" target="_blank">
                             <h5 class="card-title">{{ $product->name }}</h5>
                         </a>
                         <p class="card-text">¥{{ number_format($product->price) }}</p>

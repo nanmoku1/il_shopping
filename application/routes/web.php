@@ -19,6 +19,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('products', 'ProductController')->only([
     'index',
+    'show',
 ]);
 
 Route::middleware('auth:user')->group(function () {
@@ -29,6 +30,13 @@ Route::middleware('auth:user')->group(function () {
 
     Route::post('/wish_products/{product}', 'WishProductController@store');
     Route::delete('/wish_products/{product}', 'WishProductController@destroy');
+
+    Route::resource('products.product_reviews', 'ProductReviewController')->only([
+        'create',
+        'store',
+        'edit',
+        'update',
+    ]);
 });
 
 /**
