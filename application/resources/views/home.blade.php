@@ -9,9 +9,7 @@
         </div>
 
         <div class="row">
-            @foreach(auth("user")->user()->wishProducts as $product)
-                @include('products.components.product_card', ['product' => $product])
-            @endforeach
+            @each('products.components.product_card', auth("user")->user()->wishProducts, 'product')
         </div>
     @endauth
 @endsection

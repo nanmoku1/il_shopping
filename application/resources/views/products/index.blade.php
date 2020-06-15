@@ -18,9 +18,7 @@
     </div>
 
     <div class="row pt-2">
-        @foreach($products as $product)
-            @include('products.components.product_card', ['product' => $product])
-        @endforeach
+        @each('products.components.product_card', $products, 'product')
     </div>
 
     <div class="row">
