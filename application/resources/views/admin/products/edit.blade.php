@@ -1,24 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-    <script>
-        $(function(){
-            $("#form_edit").on("submit", function(){
-                let elementPrice = $("#price");
-                elementPrice.val(elementPrice.val().replace(/[¥,]/g, ""));
-            });
-            $("#price").maskMoney({
-                prefix:"¥",
-                thousands:",",
-                allowZero:true,
-                precision:"0",
-            })
-                .maskMoney("mask");
-        });
-    </script>
     <div class="row pt-3">
         <div class="col-sm">
-            <form id="form_edit" action="{{ route("admin.products.update", $product->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="form_edit" class="form_money" action="{{ route("admin.products.update", $product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
@@ -46,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label for="price">価格</label>
-                    <input type="text" class="form-control @error("price") is-invalid @enderror" id="price" name="price" value="{{ old("price", $product->price) }}" placeholder="価格">
+                    <input type="text" class="form-control input_money @error("price") is-invalid @enderror" id="price" name="price" value="{{ old("price", $product->price) }}" placeholder="価格">
                     @error("price")
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
