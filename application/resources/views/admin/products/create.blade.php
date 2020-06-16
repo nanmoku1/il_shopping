@@ -1,25 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-    <script>
-    $(function(){
-        const elementPrice = $("#price");
-
-        $("#form_create").on("submit", function(){
-            elementPrice.val(elementPrice.val().replace(/[¥,]/g, ""));
-        });
-        elementPrice.maskMoney({
-            prefix:"¥",
-            thousands:",",
-            allowZero:true,
-            precision:"0",
-        })
-            .maskMoney("mask");
-    });
-    </script>
     <div class="row pt-3">
         <div class="col-sm">
-            <form id="form_create" action="{{ route("admin.products.store") }}" method="POST" enctype="multipart/form-data">
+            <form id="form_create" class="form_money" action="{{ route("admin.products.store") }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="product_category_id">商品カテゴリ</label>
@@ -47,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label for="price">価格</label>
-                    <input type="text" class="form-control @error("price") is-invalid @enderror" id="price" name="price" value="{{ old("price") }}" placeholder="価格">
+                    <input type="text" class="form-control input_money @error("price") is-invalid @enderror" id="price" name="price" value="{{ old("price") }}" placeholder="価格">
                     @error("price")
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
