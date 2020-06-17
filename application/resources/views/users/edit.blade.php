@@ -16,11 +16,7 @@
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $user->name) }}" autocomplete="name" autofocus="">
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                @include('components.form_error_message', ['input_name' => 'name'])
                             </div>
                         </div>
 
@@ -28,11 +24,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">メールアドレス</label>
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $user->email) }}" autocomplete="email">
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                @include('components.form_error_message', ['input_name' => 'email'])
                             </div>
                         </div>
 
@@ -40,11 +32,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">パスワード</label>
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                @include('components.form_error_message', ['input_name' => 'password'])
                             </div>
                         </div>
 
@@ -60,17 +48,13 @@
                             <label for="image_path" class="col-md-4 col-form-label text-md-right">イメージ</label>
                             <div class="col-md-6">
                                 <input type="file" class="form-control-file @error('image_path') is-invalid @enderror" id="image_path" name="image_path">
-                                @error('image_path')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                @include('components.form_error_message', ['input_name' => 'image_path'])
                                 @if(filled($user->image_path))
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="image_delete" name="image_delete" value="1">
-                                    <label for="image_delete">削除</label>
-                                </div>
-                                <img class="img-thumbnail" width="100" src="{{ \Storage::url($user->image_path) }}">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="image_delete" name="image_delete" value="1">
+                                        <label for="image_delete">削除</label>
+                                    </div>
+                                    <img class="img-thumbnail" width="100" src="{{ \Storage::url($user->image_path) }}">
                                 @endif
                             </div>
                         </div>

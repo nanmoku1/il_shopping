@@ -9,31 +9,19 @@
                 <div class="form-group">
                     <label for="name">名称</label>
                     <input type="text" class="form-control @error("name") is-invalid @enderror" id="name" name="name" value="{{ old("name", $admin_user->name) }}" placeholder="名称" autocomplete="name" autofocus="">
-                    @error("name")
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    @include('components.form_error_message', ['input_name' => 'name'])
                 </div>
 
                 <div class="form-group">
                     <label for="email">メールアドレス</label>
                     <input type="text" class="form-control @error("email") is-invalid @enderror" id="email" name="email" value="{{ old("email", $admin_user->email) }}" placeholder="メールアドレス" autocomplete="email">
-                    @error("email")
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    @include('components.form_error_message', ['input_name' => 'email'])
                 </div>
 
                 <div class="form-group">
                     <label for="password">パスワード</label>
                     <input type="password" class="form-control @error("password") is-invalid @enderror" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
-                    @error("password")
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    @include('components.form_error_message', ['input_name' => 'password'])
                 </div>
 
                 <div class="form-group">
