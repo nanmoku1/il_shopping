@@ -9,31 +9,19 @@
             <div class="form-group">
                 <label for="name">名称</label>
                 <input type="text" class="form-control @error("name") is-invalid @enderror" id="name" name="name" value="{{ old("name", $user->name) }}" placeholder="名称" autocomplete="name" autofocus="">
-                @error("name")
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
+                @include('components.form_error_message', ['input_name' => 'name'])
             </div>
 
             <div class="form-group">
                 <label for="email">メールアドレス</label>
                 <input type="text" class="form-control @error("email") is-invalid @enderror" id="email" name="email" value="{{ old("email", $user->email) }}" placeholder="メールアドレス" autocomplete="email">
-                @error("email")
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
+                @include('components.form_error_message', ['input_name' => 'email'])
             </div>
 
             <div class="form-group">
                 <label for="password">パスワード</label>
                 <input type="password" class="form-control @error("password") is-invalid @enderror" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
-                @error("password")
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
+                @include('components.form_error_message', ['input_name' => 'password'])
             </div>
 
             <div class="form-group">
@@ -44,23 +32,19 @@
             <div class="form-group">
                 <label for="image_path">イメージ</label>
                 <input type="file" class="form-control-file @error("image_path") is-invalid @enderror" id="image_path" name="image_path">
-                @error("image_path")
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
+                @include('components.form_error_message', ['input_name' => 'image_path'])
             </div>
 
             @if(filled($user->image_path))
-            <div class="form-group">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="image_delete" id="image_delete" value="1">
-                    <label class="form-check-label" for="image_delete">イメージ削除</label>
+                <div class="form-group">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="image_delete" id="image_delete" value="1">
+                        <label class="form-check-label" for="image_delete">イメージ削除</label>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <img class="img-thumbnail" src="{{ \Storage::url($user->image_path) }}">
-            </div>
+                <div class="form-group">
+                    <img class="img-thumbnail" src="{{ \Storage::url($user->image_path) }}">
+                </div>
             @endif
 
             <hr class="mb-3">

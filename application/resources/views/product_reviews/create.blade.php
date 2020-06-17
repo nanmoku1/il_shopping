@@ -8,21 +8,13 @@
                 <div class="form-group">
                     <label for="title">タイトル</label>
                     <input type="text" class="form-control @error("title") is-invalid @enderror" id="title" name="title" value="{{ old("title") }}" placeholder="タイトル" autofocus="">
-                    @error("title")
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    @include('components.form_error_message', ['input_name' => 'title'])
                 </div>
 
                 <div class="form-group">
                     <label for="body">本文</label>
                     <input type="text" class="form-control  @error("body") is-invalid @enderror" id="body" name="body" value="{{ old("body") }}" placeholder="本文">
-                    @error("body")
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    @include('components.form_error_message', ['input_name' => 'body'])
                 </div>
 
                 @include('product_reviews.components.rank_input_radioes', ['rank' => old('rank')])
